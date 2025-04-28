@@ -2,6 +2,7 @@ class Product {
   num? id;
   String? name;
   String? description;
+  num? categoryId;
   String? createdAt;
   String? updatedAt;
 
@@ -9,6 +10,7 @@ class Product {
     this.id,
     this.name,
     this.description,
+    this.categoryId,
     this.createdAt,
     this.updatedAt,
   });
@@ -17,6 +19,7 @@ class Product {
     id = json['id'] as num?;
     name = json['name'];
     description = json['description'];
+    categoryId = json['category_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -26,6 +29,7 @@ class Product {
     data['id'] = id;
     data['name'] = name;
     data['description'] = description;
+    data['category_id'] = categoryId;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;

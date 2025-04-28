@@ -7,6 +7,8 @@ abstract class Routes {
   static const PRODUCT_FORM = _Paths.PRODUCT_FORM;
   static const CATEGORY = _Paths.CATEGORY;
   static const CATEGORY_FORM = _Paths.CATEGORY_FORM;
+  static const PRODUCT = _Paths.PRODUCT;
+  static const TRANSACTION = _Paths.TRANSACTION;
 }
 
 abstract class _Paths {
@@ -15,4 +17,6 @@ abstract class _Paths {
   static const PRODUCT_FORM = '/product-form';
   static const CATEGORY = '/category';
   static const CATEGORY_FORM = '/category-form';
+  static const PRODUCT = '/product';
+  static const TRANSACTION = '/transaction';
 }

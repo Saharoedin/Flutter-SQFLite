@@ -19,7 +19,7 @@ class DbHelper {
     await db.execute('''
       CREATE TABLE categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nama TEXT NULL
+        name TEXT NULL
       )
     ''');
 
