@@ -1,5 +1,6 @@
 import 'package:flutter_sqflite/app/data/helpers/db_helper.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
+import 'package:sqflite/sqflite.dart';
 
 class CategoryProvider {
   static Future<List<CategoryModel>> fetchCategories() async {
@@ -16,7 +17,11 @@ class CategoryProvider {
 
   static Future<void> insert(CategoryModel category) async {
     final db = await DbHelper.database;
-    await db.insert('categories', category.toJson());
+    await db.insert(
+      'categories',
+      category.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   static Future<void> update(CategoryModel category) async {

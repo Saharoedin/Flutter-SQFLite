@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "name": "name",
+  "description": "description",
+  "category_name": "category name",
+  "created_at": "created_at",
+  "updated_at": "updated_at"
+}

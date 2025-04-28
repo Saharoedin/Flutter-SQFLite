@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/product_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_with_category_model.dart';
 import 'package:flutter_sqflite/app/routes/app_pages.dart';
 import 'package:flutter_sqflite/app/widgets/drawer_custom.dart';
 
@@ -14,7 +15,13 @@ class ProductView extends GetView<ProductController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Products'),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Products',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         actions: [
           Padding(
@@ -23,44 +30,75 @@ class ProductView extends GetView<ProductController> {
               onTap: () {
                 controller.isNew.value = true;
                 controller.clearForm();
+                controller.fetchCategories();
+                controller.categoryId.value =
+                    int.parse('${controller.categories.first.id}');
                 _showFormBottomSheet(context);
               },
-              child: Text(
-                'Add',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Icon(
+                CupertinoIcons.add_circled,
+                color: Colors.white,
+                size: 24,
               ),
             ),
           ),
         ],
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: DrawerCustom(),
       body: Obx(
         () {
-          if (controller.products.isEmpty)
+          if (controller.productWithCategories.isEmpty)
             return Center(
               child: Text('Data Not Found!'),
             );
 
           return ListView.builder(
-            itemCount: controller.products.length,
+            itemCount: controller.productWithCategories.length,
             itemBuilder: (context, index) {
-              Product product = controller.products[index];
+              ProductWithCategory product =
+                  controller.productWithCategories[index];
 
               return GestureDetector(
                 onTap: () {
-                  controller.product.value = product;
                   controller.isNew.value = false;
+                  controller.product.value = product;
+                  controller.txtName.text = '${product.name}';
+                  controller.txtDescription.text = '${product.description}';
                   controller.categoryId.value =
                       int.parse('${product.categoryId}');
                   _showFormBottomSheet(context);
                 },
                 child: ListTile(
                   title: Text('${product.name}'),
-                  subtitle: Text('${product.description}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${product.description}'),
+                      Container(
+                        margin: EdgeInsets.only(top: 8, bottom: 8),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${product.categoryName}',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  shape: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.shade300,
+                    ),
+                  ),
                   trailing: GestureDetector(
                     onTap: () {
                       controller.removeProduct(
@@ -93,7 +131,16 @@ class ProductView extends GetView<ProductController> {
           ),
           child: Column(
             children: [
-              Text('New Product'),
+              Text(
+                'New Product',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
               Expanded(
                 child: Form(
                   key: _formKey,
@@ -169,10 +216,9 @@ class ProductView extends GetView<ProductController> {
                       if (controller.isNew.value == true) {
                         controller.insertProduct(
                           Product(
-                            id: controller.product.value.id,
                             name: controller.txtName.text,
                             description: controller.txtDescription.text,
-                            categoryId: controller.category.value.id,
+                            categoryId: controller.categoryId.value,
                             createdAt: DateTime.now().toIso8601String(),
                             updatedAt: DateTime.now().toIso8601String(),
                           ),
@@ -180,7 +226,7 @@ class ProductView extends GetView<ProductController> {
                       } else {
                         controller.updateProduct(
                           Product(
-                            id: controller.category.value.id,
+                            id: controller.product.value.id,
                             name: controller.txtName.text,
                             description: controller.txtDescription.text,
                             categoryId: controller.category.value.id,

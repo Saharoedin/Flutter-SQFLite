@@ -1,5 +1,6 @@
 import 'package:flutter_sqflite/app/data/helpers/db_helper.dart';
 import 'package:get/get.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../models/product_model.dart';
 
@@ -18,7 +19,11 @@ class ProductProvider extends GetConnect {
 
   static Future<void> insert(Product product) async {
     final db = await DbHelper.database;
-    await db.insert('products', product.toJson());
+    await db.insert(
+      'products',
+      product.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   static Future<void> update(Product product) async {
