@@ -13,7 +13,13 @@ class CategoryView extends GetView<CategoryController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categories'),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Categories',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         actions: [
           Padding(
@@ -24,17 +30,15 @@ class CategoryView extends GetView<CategoryController> {
                 controller.clearForm();
                 _showFormBottomSheet(context);
               },
-              child: Text(
-                'Add',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Icon(
+                CupertinoIcons.add_circled,
+                color: Colors.white,
+                size: 24,
               ),
             ),
           ),
         ],
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: DrawerCustom(),
       body: Obx(() {

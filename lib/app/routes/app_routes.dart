@@ -4,9 +4,7 @@ part of 'app_pages.dart';
 abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
-  static const PRODUCT_FORM = _Paths.PRODUCT_FORM;
   static const CATEGORY = _Paths.CATEGORY;
-  static const CATEGORY_FORM = _Paths.CATEGORY_FORM;
   static const PRODUCT = _Paths.PRODUCT;
   static const TRANSACTION = _Paths.TRANSACTION;
 }
@@ -14,9 +12,7 @@ abstract class Routes {
 abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
-  static const PRODUCT_FORM = '/product-form';
   static const CATEGORY = '/category';
-  static const CATEGORY_FORM = '/category-form';
   static const PRODUCT = '/product';
   static const TRANSACTION = '/transaction';
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/category_model.dart';
 import 'package:flutter_sqflite/app/data/models/product_model.dart';
 import 'package:flutter_sqflite/app/data/models/product_with_category_model.dart';
-import 'package:flutter_sqflite/app/routes/app_pages.dart';
 import 'package:flutter_sqflite/app/widgets/drawer_custom.dart';
 
 import 'package:get/get.dart';
@@ -46,72 +46,221 @@ class ProductView extends GetView<ProductController> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: DrawerCustom(),
-      body: Obx(
-        () {
-          if (controller.productWithCategories.isEmpty)
-            return Center(
-              child: Text('Data Not Found!'),
-            );
-
-          return ListView.builder(
-            itemCount: controller.productWithCategories.length,
-            itemBuilder: (context, index) {
-              ProductWithCategory product =
-                  controller.productWithCategories[index];
-
-              return GestureDetector(
-                onTap: () {
-                  controller.isNew.value = false;
-                  controller.product.value = product;
-                  controller.txtName.text = '${product.name}';
-                  controller.txtDescription.text = '${product.description}';
-                  controller.categoryId.value =
-                      int.parse('${product.categoryId}');
-                  _showFormBottomSheet(context);
-                },
-                child: ListTile(
-                  title: Text('${product.name}'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${product.description}'),
-                      Container(
-                        margin: EdgeInsets.only(top: 8, bottom: 8),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          '${product.categoryName}',
-                          style: TextStyle(
-                            color: Colors.white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: TextFormField(
+              onChanged: (value) {
+                controller.productWithCategories.value =
+                    controller.productWithCategoriesTemp
+                        .where(
+                          (dt) => dt.name!.isCaseInsensitiveContains(value),
+                        )
+                        .toList();
+              },
+              decoration: InputDecoration(
+                hintText: 'Type some text here  ...',
+                suffixIcon: Icon(CupertinoIcons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue, width: 2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Text(
+              'Categories',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 16, top: 16),
+            height: 34,
+            width: Get.width,
+            child: Obx(
+              () => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        controller.category.value =
+                            CategoryModel(id: 0, name: 'Semua');
+                        controller.productWithCategories.value =
+                            controller.productWithCategoriesTemp;
+                      },
+                      child: Obx(
+                        () => Container(
+                          margin: EdgeInsets.only(left: 16),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: controller.category.value.id == 0
+                                ? Colors.blue
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.blue),
+                          ),
+                          child: Text(
+                            'Semua',
+                            style: TextStyle(
+                              color: controller.category.value.id == 0
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  shape: Border(
-                    bottom: BorderSide(
-                      color: Colors.grey.shade300,
                     ),
-                  ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      controller.removeProduct(
-                        int.parse('${product.id}'),
-                      );
-                    },
-                    child: Icon(CupertinoIcons.clear),
-                  ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      controller: ScrollController(),
+                      itemCount: controller.categories.length,
+                      itemBuilder: (context, index) {
+                        CategoryModel category = controller.categories[index];
+                        return GestureDetector(
+                          onTap: () {
+                            controller.category.value = category;
+                            controller.productWithCategories.value =
+                                controller.productWithCategoriesTemp
+                                    .where(
+                                      (dt) => dt.categoryId == category.id,
+                                    )
+                                    .toList();
+                          },
+                          child: Obx(
+                            () => Container(
+                              margin: EdgeInsets.only(left: 16),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color:
+                                    controller.category.value.id == category.id
+                                        ? Colors.blue
+                                        : Colors.transparent,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.blue),
+                              ),
+                              child: Text(
+                                '${category.name}',
+                                style: TextStyle(
+                                  color: controller.category.value.id ==
+                                          category.id
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              );
-            },
-          );
-        },
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 16),
+            margin: EdgeInsets.only(bottom: 8),
+            child: Text(
+              'Products',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Divider(
+              color: Colors.grey.shade200,
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () {
+                if (controller.productWithCategories.isEmpty)
+                  return Center(
+                    child: Text('Data Not Found!'),
+                  );
+
+                return ListView.builder(
+                  itemCount: controller.productWithCategories.length,
+                  itemBuilder: (context, index) {
+                    ProductWithCategory product =
+                        controller.productWithCategories[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        controller.isNew.value = false;
+                        controller.product.value = product;
+                        controller.txtName.text = '${product.name}';
+                        controller.txtDescription.text =
+                            '${product.description}';
+                        controller.categoryId.value =
+                            int.parse('${product.categoryId}');
+                        _showFormBottomSheet(context);
+                      },
+                      child: ListTile(
+                        title: Text('${product.name}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${product.description}'),
+                            Container(
+                              margin: EdgeInsets.only(top: 8, bottom: 8),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '${product.categoryName}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        shape: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
+                        ),
+                        trailing: GestureDetector(
+                          onTap: () {
+                            controller.removeProduct(
+                              int.parse('${product.id}'),
+                            );
+                          },
+                          child: Icon(CupertinoIcons.clear),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

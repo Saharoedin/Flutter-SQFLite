@@ -2,14 +2,10 @@ import 'package:get/get.dart';
 
 import '../modules/category/bindings/category_binding.dart';
 import '../modules/category/views/category_view.dart';
-import '../modules/category_form/bindings/category_form_binding.dart';
-import '../modules/category_form/views/category_form_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
-import '../modules/product_form/bindings/product_form_binding.dart';
-import '../modules/product_form/views/product_form_view.dart';
 import '../modules/transaction/bindings/transaction_binding.dart';
 import '../modules/transaction/views/transaction_view.dart';
 
@@ -27,19 +23,9 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.PRODUCT_FORM,
-      page: () => const ProductFormView(),
-      binding: ProductFormBinding(),
-    ),
-    GetPage(
       name: _Paths.CATEGORY,
       page: () => const CategoryView(),
       binding: CategoryBinding(),
-    ),
-    GetPage(
-      name: _Paths.CATEGORY_FORM,
-      page: () => const CategoryFormView(),
-      binding: CategoryFormBinding(),
     ),
     GetPage(
       name: _Paths.PRODUCT,

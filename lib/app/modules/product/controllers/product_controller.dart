@@ -13,10 +13,12 @@ class ProductController extends GetxController {
   TextEditingController txtCategoryId = TextEditingController();
 
   var products = List<Product>.empty(growable: true).obs;
+  var productsTemp = List<Product>.empty(growable: true).obs;
   var product = ProductWithCategory().obs;
   var categories = List<CategoryModel>.empty().obs;
   var category = CategoryModel().obs;
   var productWithCategories = List<ProductWithCategory>.empty().obs;
+  var productWithCategoriesTemp = List<ProductWithCategory>.empty().obs;
 
   var categoryId = 0.obs;
   var isNew = true.obs;
@@ -30,14 +32,18 @@ class ProductController extends GetxController {
   void fetchProductWithCategory() async {
     productWithCategories.value =
         await ProductWithCategoryProvider.fetchProductWithCategory();
+    productWithCategoriesTemp.value =
+        await ProductWithCategoryProvider.fetchProductWithCategory();
   }
 
   void fetchProducts() async {
     products.value = await ProductProvider.fetchProducts();
+    productsTemp.value = await ProductProvider.fetchProducts();
   }
 
   void fetchCategories() async {
     categories.value = await CategoryProvider.fetchCategories();
+    category.value = CategoryModel(id: 0, name: 'Semua');
   }
 
   void insertProduct(Product product) async {
