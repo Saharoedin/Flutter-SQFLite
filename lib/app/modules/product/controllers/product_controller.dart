@@ -48,19 +48,19 @@ class ProductController extends GetxController {
 
   void insertProduct(Product product) async {
     await ProductProvider.insert(product);
-    fetchProducts();
+    fetchProductWithCategory();
     Get.back();
   }
 
   void updateProduct(Product product) async {
     await ProductProvider.update(product);
-    fetchProducts();
+    fetchProductWithCategory();
     Get.back();
   }
 
   void removeProduct(int id) async {
     await ProductProvider.remove(id);
-    fetchProducts();
+    fetchProductWithCategory();
   }
 
   @override

@@ -173,15 +173,30 @@ class ProductView extends GetView<ProductController> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             margin: EdgeInsets.only(bottom: 8),
-            child: Text(
-              'Products',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Products',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Obx(
+                  () => Text(
+                    '${controller.productWithCategories.length}',
+                    style: TextStyle(
+                      color: Colors.black,
+                      // fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -359,6 +374,9 @@ class ProductView extends GetView<ProductController> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                    padding: WidgetStatePropertyAll(
+                      EdgeInsets.symmetric(vertical: 12),
+                    ),
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -378,7 +396,7 @@ class ProductView extends GetView<ProductController> {
                             id: controller.product.value.id,
                             name: controller.txtName.text,
                             description: controller.txtDescription.text,
-                            categoryId: controller.category.value.id,
+                            categoryId: controller.categoryId.value,
                             updatedAt: DateTime.now().toIso8601String(),
                           ),
                         );
