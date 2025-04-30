@@ -8,9 +8,15 @@ class DbHelper {
 
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
       onCreate: (db, version) async {
         await _createTables(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await _onUpgradeDb(db, oldVersion, newVersion);
       },
     );
   }
@@ -28,6 +34,7 @@ class DbHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NULL,
         description TEXT NULL,
+        price INTEGER,
         category_id INTEGER,
         created_at TEXT NULL,
         updated_at TEXT NULL,
@@ -38,7 +45,8 @@ class DbHelper {
     await db.execute('''
       CREATE TABLE transactions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT NULL
+        created_at TEXT NULL,
+        updated_at TEXT NULL
       )
     ''');
 
@@ -50,6 +58,18 @@ class DbHelper {
         qty INTEGER,
         FOREIGN KEY (transaction_id) REFERENCES transactions(id),
         FOREIGN KEY (product_id) REFERENCES products(id)
+      )
+    ''');
+  }
+
+  static Future<void> _onUpgradeDb(
+      Database db, int oldVersion, int newVersion) async {
+    await db.execute('DROP TABLE transactions');
+    await db.execute('''
+      CREATE TABLE transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        created_at TEXT NULL,
+        updated_at TEXT NULL
       )
     ''');
   }
