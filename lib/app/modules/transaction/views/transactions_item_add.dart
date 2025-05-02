@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/modules/transaction/controllers/transaction_controller.dart';
 import 'package:flutter_sqflite/app/modules/transaction/views/transactions_item.dart';
+import 'package:flutter_sqflite/app/modules/transaction/views/transactions_item_search.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -57,6 +58,14 @@ class TransactionsItemAdd extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () => TransactionsItemSearch()
+                              .showFormBottomSheet(context),
+                          child: Icon(
+                            CupertinoIcons.search,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -75,25 +84,22 @@ class TransactionsItemAdd extends StatelessWidget {
                           crossAxisCount: 2,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
-                          childAspectRatio: 1 / 1.5),
+                          childAspectRatio: 1 / 1.6),
                       itemBuilder: (context, index) {
                         return Card(
                           elevation: 0,
-                          color: Colors.white,
+                          color: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
                             children: [
                               Container(
-                                width: Get.width,
-                                height: 120,
+                                // width: Get.width,
+                                height: 150,
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(12),
-                                    topRight: Radius.circular(12),
-                                  ),
+                                  borderRadius: BorderRadius.circular(12),
                                   image: DecorationImage(
                                     image: AssetImage(
                                       'assets/images/product2.jpg',
@@ -114,7 +120,8 @@ class TransactionsItemAdd extends StatelessWidget {
                                       Text(
                                         'Seblak',
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -123,7 +130,6 @@ class TransactionsItemAdd extends StatelessWidget {
                                         '${NumberFormat.currency(locale: 'id', symbol: 'IDR ').format(1000)}',
                                         style: TextStyle(
                                           fontSize: 14,
-                                          fontWeight: FontWeight.bold,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -140,7 +146,7 @@ class TransactionsItemAdd extends StatelessWidget {
                                               //
                                             },
                                             child: Text(
-                                              'Add',
+                                              '1 item',
                                               style:
                                                   TextStyle(color: Colors.blue),
                                             )),
