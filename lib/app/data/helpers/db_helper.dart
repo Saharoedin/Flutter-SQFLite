@@ -30,23 +30,37 @@ class DbHelper {
     ''');
 
     await db.execute('''
+      CREATE TABLE units (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NULL
+      )
+    ''');
+
+    await db.execute('''
       CREATE TABLE products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NULL,
+        name TEXT,
         description TEXT NULL,
         price INTEGER,
+        unit_id INTEGER,
         category_id INTEGER,
         created_at TEXT NULL,
         updated_at TEXT NULL,
         FOREIGN KEY (category_id) REFERENCES categories(id)
+        FOREIGN KEY (unit_id) REFERENCES units(id)
       )
     ''');
 
     await db.execute('''
       CREATE TABLE transactions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NULL,
+        subtotal REAL,
+        discount REAL,
+        tax REAL,
+        total REAL
         created_at TEXT NULL,
-        updated_at TEXT NULL
+        updated_at TEXT NULLwwdjgffdqaq16
       )
     ''');
 
@@ -56,6 +70,11 @@ class DbHelper {
         transaction_id INTEGER,
         product_id INTEGER,
         qty INTEGER,
+        price REAL,
+        discount REAL,
+        tax REAL,
+        subtotal REAL,
+        created_at TEXT NULL,
         FOREIGN KEY (transaction_id) REFERENCES transactions(id),
         FOREIGN KEY (product_id) REFERENCES products(id)
       )

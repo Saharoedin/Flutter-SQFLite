@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/product_model.dart';
 import 'package:flutter_sqflite/app/data/models/transaction_model.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TransactionController extends GetxController {
+  var products = List<Product>.empty().obs;
   var transactions = List<TransactionModel>.empty().obs;
   var transactionsTemp = List<TransactionModel>.empty().obs;
   var transaction = TransactionModel().obs;

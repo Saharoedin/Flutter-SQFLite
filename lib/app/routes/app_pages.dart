@@ -7,7 +7,7 @@ import '../modules/home/views/home_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
 import '../modules/transaction/bindings/transaction_binding.dart';
-import '../modules/transaction/views/transaction_view.dart';
+import '../modules/transaction/views/transactions_view.dart';
 
 part 'app_routes.dart';
 

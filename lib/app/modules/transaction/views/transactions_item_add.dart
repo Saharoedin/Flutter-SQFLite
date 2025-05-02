@@ -1,0 +1,425 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/modules/transaction/controllers/transaction_controller.dart';
+import 'package:flutter_sqflite/app/modules/transaction/views/transactions_item.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+class TransactionsItemAdd extends StatelessWidget {
+  const TransactionsItemAdd({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+
+  void showFormBottomSheet(BuildContext context) {
+    var controller = Get.put(TransactionController());
+    final _formKey = GlobalKey<FormState>();
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            // borderRadius: BorderRadius.circular(30),
+          ),
+          padding: EdgeInsets.only(
+            top: 76,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Add Item',
+                      style: TextStyle(
+                        fontSize: 20,
+                        // fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () => Get.back(),
+                          child: Icon(
+                            CupertinoIcons.clear,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: Container(
+                    padding: EdgeInsets.all(16),
+                    color: Colors.grey.shade100,
+                    child: GridView.builder(
+                      itemCount: 20,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 1 / 1.5),
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 0,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: Get.width,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                  ),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      'assets/images/product2.jpg',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        'Seblak',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        '${NumberFormat.currency(locale: 'id', symbol: 'IDR ').format(1000)}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Container(
+                                        width: Get.width,
+                                        margin: EdgeInsets.only(top: 8),
+                                        child: OutlinedButton(
+                                            style: ButtonStyle(
+                                                side: WidgetStatePropertyAll(
+                                              BorderSide(color: Colors.blue),
+                                            )),
+                                            onPressed: () {
+                                              //
+                                            },
+                                            child: Text(
+                                              'Add',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                    // ListView(
+                    //   padding: EdgeInsets.symmetric(horizontal: 16),
+                    //   shrinkWrap: true,
+                    //   controller: ScrollController(),
+                    //   children: [
+                    //     SizedBox(
+                    //       height: 16,
+                    //     ),
+                    //     Text(
+                    //       'Products',
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         // fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       height: 8,
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.only(bottom: 16),
+                    //       padding:
+                    //           EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    //       decoration: BoxDecoration(
+                    //         color: Colors.white,
+                    //         borderRadius: BorderRadius.circular(12),
+                    //         border: Border.all(color: Colors.grey),
+                    //       ),
+                    //       child: Obx(
+                    //         () => DropdownButton(
+                    //           padding: EdgeInsets.all(0),
+                    //           menuWidth: Get.width,
+                    //           borderRadius: BorderRadius.circular(12),
+                    //           hint: Text(
+                    //             'Select...',
+                    //             style: TextStyle(color: Colors.grey),
+                    //           ),
+                    //           isExpanded: true,
+                    //           underline: SizedBox(),
+                    //           // value: controller.categoryId.value == 0
+                    //           //     ? null
+                    //           //     : controller.categoryId.value,
+                    //           items: controller.products.map(
+                    //             (element) {
+                    //               return DropdownMenuItem(
+                    //                 value: element.id,
+                    //                 child: Text('${element.name}'),
+                    //               );
+                    //             },
+                    //           ).toList(),
+                    //           onChanged: (value) {
+                    //             // controller.categoryId.value = int.parse('${value}');
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Text(
+                    //       'Description',
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         // fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       height: 8,
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.only(bottom: 16),
+                    //       child: TextFormField(
+                    //         // controller: controller.txtEndDate,
+                    //         decoration: InputDecoration(
+                    //           hintText: 'Product description',
+                    //           hintStyle: TextStyle(color: Colors.grey),
+                    //           fillColor: Colors.white,
+                    //           filled: true,
+                    //           border: OutlineInputBorder(
+                    //             borderRadius: BorderRadius.circular(12),
+                    //             borderSide: BorderSide(color: Colors.grey),
+                    //           ),
+                    //           enabledBorder: OutlineInputBorder(
+                    //             borderRadius: BorderRadius.circular(12),
+                    //             borderSide: BorderSide(color: Colors.grey),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.only(bottom: 16),
+                    //       child: Row(
+                    //         children: [
+                    //           Expanded(
+                    //             child: Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.start,
+                    //               children: [
+                    //                 Text(
+                    //                   'Price',
+                    //                   style: TextStyle(
+                    //                     fontSize: 16,
+                    //                     // fontWeight: FontWeight.bold,
+                    //                   ),
+                    //                 ),
+                    //                 SizedBox(
+                    //                   height: 8,
+                    //                 ),
+                    //                 TextFormField(
+                    //                   // controller: controller.txtEndDate,
+                    //                   decoration: InputDecoration(
+                    //                     hintText: 'Price',
+                    //                     hintStyle: TextStyle(color: Colors.grey),
+                    //                     // suffixIcon: Icon(CupertinoIcons.calendar),
+                    //                     fillColor: Colors.white,
+                    //                     filled: true,
+                    //                     border: OutlineInputBorder(
+                    //                       borderRadius: BorderRadius.circular(12),
+                    //                       borderSide: BorderSide.none,
+                    //                     ),
+                    //                     enabledBorder: OutlineInputBorder(
+                    //                       borderRadius: BorderRadius.circular(12),
+                    //                       borderSide:
+                    //                           BorderSide(color: Colors.grey),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           SizedBox(
+                    //             width: 16,
+                    //           ),
+                    //           Expanded(
+                    //             child: Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.start,
+                    //               children: [
+                    //                 Text(
+                    //                   'Quantity',
+                    //                   style: TextStyle(
+                    //                     fontSize: 16,
+                    //                     // fontWeight: FontWeight.bold,
+                    //                   ),
+                    //                 ),
+                    //                 SizedBox(
+                    //                   height: 8,
+                    //                 ),
+                    //                 TextFormField(
+                    //                   // controller: controller.txtEndDate,
+                    //                   decoration: InputDecoration(
+                    //                     hintText: 'Qty',
+                    //                     hintStyle: TextStyle(color: Colors.grey),
+                    //                     // suffixIcon: Icon(CupertinoIcons.calendar),
+                    //                     fillColor: Colors.white,
+                    //                     filled: true,
+                    //                     border: OutlineInputBorder(
+                    //                       borderRadius: BorderRadius.circular(12),
+                    //                       borderSide: BorderSide.none,
+                    //                     ),
+                    //                     enabledBorder: OutlineInputBorder(
+                    //                       borderRadius: BorderRadius.circular(12),
+                    //                       borderSide:
+                    //                           BorderSide(color: Colors.grey),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     Text(
+                    //       'Discount',
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         // fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       height: 8,
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.only(bottom: 16),
+                    //       child: TextFormField(
+                    //         // controller: controller.txtEndDate,
+                    //         decoration: InputDecoration(
+                    //           hintText: 'Discount',
+                    //           hintStyle: TextStyle(color: Colors.grey),
+                    //           fillColor: Colors.white,
+                    //           filled: true,
+                    //           border: OutlineInputBorder(
+                    //             borderRadius: BorderRadius.circular(12),
+                    //             borderSide: BorderSide(color: Colors.grey),
+                    //           ),
+                    //           enabledBorder: OutlineInputBorder(
+                    //             borderRadius: BorderRadius.circular(12),
+                    //             borderSide: BorderSide(color: Colors.grey),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Text(
+                    //       'Tax',
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         // fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       height: 8,
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.only(bottom: 16),
+                    //       child: TextFormField(
+                    //         // controller: controller.txtEndDate,
+                    //         decoration: InputDecoration(
+                    //           hintText: 'Tax',
+                    //           hintStyle: TextStyle(color: Colors.grey),
+                    //           fillColor: Colors.white,
+                    //           filled: true,
+                    //           border: OutlineInputBorder(
+                    //             borderRadius: BorderRadius.circular(12),
+                    //             borderSide: BorderSide(color: Colors.grey),
+                    //           ),
+                    //           enabledBorder: OutlineInputBorder(
+                    //             borderRadius: BorderRadius.circular(12),
+                    //             borderSide: BorderSide(color: Colors.grey),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.symmetric(vertical: 16),
+                    //       width: Get.width,
+                    //       child: ElevatedButton(
+                    //         style: ButtonStyle(
+                    //             backgroundColor:
+                    //                 WidgetStatePropertyAll(Colors.blue),
+                    //             padding: WidgetStatePropertyAll(
+                    //               EdgeInsets.symmetric(
+                    //                   vertical: 14, horizontal: 32),
+                    //             ),
+                    //             shape: WidgetStatePropertyAll(
+                    //               RoundedRectangleBorder(
+                    //                 borderRadius: BorderRadius.circular(12),
+                    //               ),
+                    //             )),
+                    //         onPressed: () {
+                    //           if (_formKey.currentState!.validate()) {
+                    //             if (controller.isNew.value == true) {
+                    //               //
+                    //             } else {
+                    //               //
+                    //             }
+                    //           }
+                    //         },
+                    //         child: Text(
+                    //           '${controller.isNew.value ? 'Checkout' : 'Update'}',
+                    //           style: TextStyle(color: Colors.white, fontSize: 18),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
