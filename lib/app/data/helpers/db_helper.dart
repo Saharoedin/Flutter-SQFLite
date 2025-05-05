@@ -8,16 +8,16 @@ class DbHelper {
 
     return openDatabase(
       path,
-      version: 3,
+      version: 1,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
       onCreate: (db, version) async {
         await _createTables(db);
       },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        await _onUpgradeDb(db, oldVersion, newVersion);
-      },
+      // onUpgrade: (db, oldVersion, newVersion) async {
+      //   await _onUpgradeDb(db, oldVersion, newVersion);
+      // },
     );
   }
 
@@ -55,12 +55,12 @@ class DbHelper {
       CREATE TABLE transactions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NULL,
-        subtotal REAL,
+        sub_total REAL,
         discount REAL,
         tax REAL,
-        total REAL
+        grand_total REAL,
         created_at TEXT NULL,
-        updated_at TEXT NULLwwdjgffdqaq16
+        updated_at TEXT NULL
       )
     ''');
 
@@ -73,7 +73,7 @@ class DbHelper {
         price REAL,
         discount REAL,
         tax REAL,
-        subtotal REAL,
+        total REAL,
         created_at TEXT NULL,
         FOREIGN KEY (transaction_id) REFERENCES transactions(id),
         FOREIGN KEY (product_id) REFERENCES products(id)
