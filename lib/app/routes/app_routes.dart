@@ -10,6 +10,7 @@ abstract class Routes {
   static const REPORT = _Paths.REPORT;
   static const UNIT = _Paths.UNIT;
   static const ACCOUNT = _Paths.ACCOUNT;
+  static const STOCK = _Paths.STOCK;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const REPORT = '/report';
   static const UNIT = '/unit';
   static const ACCOUNT = '/account';
+  static const STOCK = '/stock';
 }

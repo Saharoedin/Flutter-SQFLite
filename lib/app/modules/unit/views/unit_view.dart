@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/unit_model.dart';
+import 'package:flutter_sqflite/app/modules/unit/views/unit_item.dart';
 import 'package:flutter_sqflite/app/widgets/drawer_custom.dart';
 
 import 'package:get/get.dart';
@@ -26,10 +27,12 @@ class UnitView extends GetView<UnitController> {
             padding: EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
+                controller.isNew.value = true;
+                controller.clearInput();
                 _showFormBottomSheet(context);
               },
               child: Icon(
-                CupertinoIcons.add_circled,
+                CupertinoIcons.add,
                 color: Colors.white,
                 size: 24,
               ),
@@ -40,158 +43,65 @@ class UnitView extends GetView<UnitController> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: DrawerCustom(),
-      body: Container(
-        // padding: EdgeInsets.only(
-        //   top: 16,
-        //   left: 16,
-        //   right: 16,
-        // ),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              margin: EdgeInsets.only(bottom: 8),
-              color: Colors.grey.shade100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total',
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.only(bottom: 8),
+            color: Colors.grey.shade100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Obx(
+                  () => Text(
+                    '${controller.units.length} units',
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                      // fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
-                  Obx(
-                    () => Text(
-                      '${controller.unitsTemp.length} units',
-                      style: TextStyle(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: Obx(
+                () => controller.units.isEmpty
+                    ? Center(
+                        child: Text('No data available!'),
+                      )
+                    : ListView.builder(
+                        itemCount: controller.units.length,
+                        itemBuilder: (context, index) {
+                          Unit unit = controller.units[index];
+                          return GestureDetector(
+                            onTap: () {
+                              controller.isNew.value = false;
+                              controller.unit.value = unit;
+                              controller.autoFill();
+                              _showFormBottomSheet(context);
+                            },
+                            child: UnitItem(
+                              unit: unit,
+                              controller: controller,
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                  ),
-                ],
               ),
             ),
-            Expanded(
-              child: Container(
-                child: Obx(
-                  () => controller.units.isEmpty
-                      ? Center(
-                          child: Text('No data available!'),
-                        )
-                      : ListView.builder(
-                          itemCount: controller.unitsTemp.length,
-                          itemBuilder: (context, index) {
-                            Unit unit = controller.unitsTemp[index];
-                            return GestureDetector(
-                              onTap: () {
-                                controller.unit.value = unit;
-                                controller.autoFill();
-                                _showFormBottomSheet(context);
-                              },
-                              child: ListTile(
-                                shape: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey.shade200,
-                                  ),
-                                ),
-                                title: Text('${unit.name}'),
-                                trailing: GestureDetector(
-                                  onTap: () {
-                                    Get.dialog(
-                                      Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: ListView(
-                                          padding: EdgeInsets.all(16),
-                                          shrinkWrap: true,
-                                          controller: ScrollController(),
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Konfirmasi',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () => Get.back(),
-                                                  child: Icon(
-                                                    CupertinoIcons.clear,
-                                                    color: Colors.red,
-                                                    size: 18,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 24,
-                                            ),
-                                            Text(
-                                                'Data ini akan dihapus secara permanen.'),
-                                            SizedBox(
-                                              height: 24,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Spacer(),
-                                                GestureDetector(
-                                                  onTap: () => Get.back(),
-                                                  child: Text(
-                                                    'Batal',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 16,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () =>
-                                                      controller.removeData(
-                                                    int.parse('${unit.id}'),
-                                                  ),
-                                                  child: Text(
-                                                    'Hapus',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Icon(
-                                    CupertinoIcons.trash,
-                                    size: 20,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -215,7 +125,7 @@ class UnitView extends GetView<UnitController> {
                 children: [
                   Center(
                     child: Text(
-                      'New Unit',
+                      '${controller.isNew.value == true ? 'New Unit' : 'Edit Unit'}',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -291,6 +201,11 @@ class UnitView extends GetView<UnitController> {
                           width: Get.width,
                           child: ElevatedButton(
                             style: ButtonStyle(
+                              shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
                               backgroundColor:
                                   WidgetStatePropertyAll(Colors.blue),
                               padding: WidgetStatePropertyAll(

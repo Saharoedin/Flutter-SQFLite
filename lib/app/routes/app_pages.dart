@@ -10,6 +10,8 @@ import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
 import '../modules/report/bindings/report_binding.dart';
 import '../modules/report/views/report_view.dart';
+import '../modules/stock/bindings/stock_binding.dart';
+import '../modules/stock/views/stock_view.dart';
 import '../modules/transaction/bindings/transaction_binding.dart';
 import '../modules/transaction/views/transactions_view.dart';
 import '../modules/unit/bindings/unit_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.ACCOUNT,
       page: () => const AccountView(),
       binding: AccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.STOCK,
+      page: () => const StockView(),
+      binding: StockBinding(),
     ),
   ];
 }

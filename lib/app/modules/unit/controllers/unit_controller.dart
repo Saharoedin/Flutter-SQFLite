@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_sqflite/app/data/models/unit_model.dart';
 import 'package:flutter_sqflite/app/data/providers/unit_provider.dart';
 import 'package:get/get.dart';
@@ -6,14 +7,12 @@ import 'package:get/get.dart';
 class UnitController extends GetxController {
   TextEditingController txtName = TextEditingController();
   var units = List<Unit>.empty().obs;
-  var unitsTemp = List<Unit>.empty().obs;
   var unit = Unit().obs;
 
   var isNew = true.obs;
 
   void fetchData() async {
     units.value = await UnitProvider.fetchData();
-    unitsTemp.value = await UnitProvider.fetchData();
   }
 
   void clearInput() {
@@ -29,6 +28,9 @@ class UnitController extends GetxController {
     fetchData();
     clearInput();
     Get.back();
+    EasyLoading.showSuccess(
+      'Data successfully added.',
+    );
   }
 
   void updateData(Unit data) async {
@@ -36,12 +38,18 @@ class UnitController extends GetxController {
     fetchData();
     clearInput();
     Get.back();
+    EasyLoading.showSuccess(
+      'Data successfully updated.',
+    );
   }
 
-  void removeData(int id) async {
+  void deleteData(int id) async {
     await UnitProvider.deleteData(id);
     fetchData();
     Get.back();
+    EasyLoading.showSuccess(
+      'Data successfully removed.',
+    );
   }
 
   @override

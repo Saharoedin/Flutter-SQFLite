@@ -75,6 +75,16 @@ class DrawerCustom extends StatelessWidget {
             ),
             Divider(),
             TextButton(
+              onPressed: () => Get.toNamed(Routes.STOCK),
+              child: Text(
+                'Stocks',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Divider(),
+            TextButton(
               onPressed: () => Get.toNamed(Routes.REPORT),
               child: Text(
                 'Report',

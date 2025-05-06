@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
 import 'package:flutter_sqflite/app/data/providers/category_provider.dart';
 import 'package:get/get.dart';
@@ -17,21 +18,35 @@ class CategoryController extends GetxController {
     categories.value = await CategoryProvider.fetchCategories();
   }
 
-  void insertCategory(CategoryModel category) async {
+  void insertData(CategoryModel category) async {
     await CategoryProvider.insert(category);
     fetchCategory();
     Get.back();
+    EasyLoading.showSuccess(
+      'Data successfully added.',
+    );
   }
 
-  void updateCategory(CategoryModel category) async {
+  void autoFill() {
+    txtName.text = '${category.value.name}';
+  }
+
+  void updateData(CategoryModel category) async {
     await CategoryProvider.update(category);
     fetchCategory();
     Get.back();
+    EasyLoading.showSuccess(
+      'Data successfully updated.',
+    );
   }
 
-  void removeCategory(int id) async {
+  void deleteData(int id) async {
     await CategoryProvider.remove(id);
     fetchCategory();
+    Get.back();
+    EasyLoading.showSuccess(
+      'Data successfully removed.',
+    );
   }
 
   @override

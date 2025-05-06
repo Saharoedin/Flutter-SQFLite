@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
+import 'package:flutter_sqflite/app/modules/category/views/category_item.dart';
+import 'package:flutter_sqflite/app/widgets/dialog_confirm.dart';
 import 'package:flutter_sqflite/app/widgets/drawer_custom.dart';
 
 import 'package:get/get.dart';
@@ -32,7 +34,7 @@ class CategoryView extends GetView<CategoryController> {
                 _showFormBottomSheet(context);
               },
               child: Icon(
-                CupertinoIcons.add_circled,
+                CupertinoIcons.add,
                 color: Colors.white,
                 size: 24,
               ),
@@ -42,144 +44,203 @@ class CategoryView extends GetView<CategoryController> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: DrawerCustom(),
-      body: Obx(() {
-        if (controller.categories.isEmpty)
-          return Center(
-            child: Text('Data Not Found!'),
-          );
-
-        return ListView.builder(
-          padding: EdgeInsets.all(0),
-          itemCount: controller.categories.length,
-          itemBuilder: (context, index) {
-            CategoryModel category = controller.categories[index];
-            return GestureDetector(
-              onTap: () {
-                controller.category.value = category;
-                controller.isNew.value = false;
-                controller.txtName.text = '${category.name}';
-                _showFormBottomSheet(context);
-              },
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                title: Text('${category.name}'),
-                shape: Border(
-                  bottom: BorderSide(color: Colors.grey.shade200),
-                ),
-                trailing: GestureDetector(
-                  onTap: () =>
-                      controller.removeCategory(int.parse('${category.id}')),
-                  child: Icon(
-                    CupertinoIcons.clear,
-                    color: Colors.red,
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.only(bottom: 8),
+            color: Colors.grey.shade100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
-              ),
-            );
-          },
-        );
-      }),
+                Obx(
+                  () => Text(
+                    '${controller.categories.length} categories',
+                    style: TextStyle(
+                      color: Colors.black,
+                      // fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Obx(() {
+              if (controller.categories.isEmpty)
+                return Center(
+                  child: Text('Data Not Found!'),
+                );
+
+              return ListView.builder(
+                padding: EdgeInsets.all(0),
+                itemCount: controller.categories.length,
+                itemBuilder: (context, index) {
+                  CategoryModel category = controller.categories[index];
+                  return GestureDetector(
+                    onTap: () {
+                      controller.isNew.value = false;
+                      controller.category.value = category;
+                      controller.autoFill();
+                      _showFormBottomSheet(context);
+                    },
+                    child: CategoryItem(
+                      category: category,
+                      controller: controller,
+                    ),
+                  );
+                },
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 
   void _showFormBottomSheet(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     showModalBottomSheet(
-      context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.white,
+      context: context,
       builder: (context) {
-        return Padding(
+        return Container(
+          color: Colors.blue,
           padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
-            bottom: MediaQuery.of(context)
-                .viewInsets
-                .bottom, // <-- Supaya naik saat keyboard muncul
+            top: 76,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Column(
             children: [
-              SizedBox(
-                height: 70,
-              ),
-              Row(
+              Stack(
                 children: [
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Icon(CupertinoIcons.clear),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    'FORM CATEGORY',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: Text(
+                      '${controller.isNew.value == true ? 'New Category' : 'Edit Category'}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: GestureDetector(
+                          onTap: () => Get.back(),
+                          child: Icon(
+                            CupertinoIcons.clear,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
               SizedBox(
                 height: 16,
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: Column(children: [
-                          TextFormField(
-                            textInputAction: TextInputAction.done,
-                            controller: controller.txtName,
-                            validator: (value) {
-                              if (value == '') return 'Enter category name';
-                              return null;
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  color: Colors.white,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            padding: EdgeInsets.only(top: 16),
+                            shrinkWrap: true,
+                            controller: ScrollController(),
+                            children: [
+                              Text(
+                                'Category Name',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              TextFormField(
+                                textInputAction: TextInputAction.next,
+                                controller: controller.txtName,
+                                validator: (value) {
+                                  if (value == '') return 'Enter Category Name';
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Enter Category Name',
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 16),
+                          width: Get.width,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              backgroundColor:
+                                  WidgetStatePropertyAll(Colors.blue),
+                              padding: WidgetStatePropertyAll(
+                                EdgeInsets.symmetric(vertical: 12),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (controller.isNew.value == true) {
+                                  controller.insertData(
+                                    CategoryModel(
+                                      name: controller.txtName.text,
+                                    ),
+                                  );
+                                } else {
+                                  controller.updateData(
+                                    CategoryModel(
+                                      id: controller.category.value.id,
+                                      name: controller.txtName.text,
+                                    ),
+                                  );
+                                }
+                              }
                             },
-                            decoration: InputDecoration(
-                              label: Text('Category Name'),
+                            child: Text(
+                              '${controller.isNew.value ? 'Save' : 'Update'}',
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
-                        ]),
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 16),
-                width: Get.width,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.blue),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (controller.isNew.value == true) {
-                        controller.insertCategory(
-                          CategoryModel(
-                            name: controller.txtName.text,
-                          ),
-                        );
-                      } else {
-                        controller.updateCategory(
-                          CategoryModel(
-                            id: controller.category.value.id,
-                            name: controller.txtName.text,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    '${controller.isNew.value ? 'Save' : 'Update'}',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 16,
               ),
             ],
           ),
