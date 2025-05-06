@@ -12,31 +12,33 @@ class DrawerCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.only(top: 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 52, bottom: 10),
+            color: Colors.blue,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.wine_bar_outlined,
-                  size: 32,
+                  size: 56,
+                  color: Colors.white,
                 ),
                 Text(
-                  'kopi',
+                  'Kopi',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  'senja',
+                  'Senja',
                   style: TextStyle(
-                    color: Colors.grey.shade400,
+                    color: Colors.white,
                     fontSize: 20,
                     // fontWeight: FontWeight.bold,
                   ),
@@ -44,151 +46,162 @@ class DrawerCustom extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 32,
+          ),
+          Container(
+            width: Get.width,
+            padding: EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 12,
             ),
-            Container(
-              width: Get.width,
-              padding: EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 12,
-              ),
-              color: Colors.grey.shade200,
-              child: Text(
-                'Transaction',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            color: Colors.grey.shade200,
+            child: Text(
+              'Transaction',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.CASHIER),
-              child: Text(
-                'Cashier',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.CASHIER),
+            child: Text(
+              'Cashier',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.STOCK),
-              child: Text(
-                'Stocks',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.STOCK),
+            child: Text(
+              'Stocks',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.REPORT),
-              child: Text(
-                'Report',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.REPORT),
+            child: Text(
+              'Report',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Container(
-              width: Get.width,
-              padding: EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 12,
-              ),
-              color: Colors.grey.shade200,
-              child: Text(
-                'Data Master',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+          ),
+          Container(
+            width: Get.width,
+            padding: EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 12,
+            ),
+            color: Colors.grey.shade200,
+            child: Text(
+              'Data Master',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.UNIT),
-              child: Text(
-                'Units',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.UNIT),
+            child: Text(
+              'Units',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.CATEGORY),
-              child: Text(
-                'Categories',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.CATEGORY),
+            child: Text(
+              'Categories',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.PRODUCT),
-              child: Text(
-                'Products',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.PRODUCT),
+            child: Text(
+              'Products',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Container(
-              width: Get.width,
-              padding: EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 12,
-              ),
-              color: Colors.grey.shade200,
-              child: Text(
-                'Settings',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+          ),
+          Container(
+            width: Get.width,
+            padding: EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 12,
+            ),
+            color: Colors.grey.shade200,
+            child: Text(
+              'Settings',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                //
-              },
-              child: Text(
-                'Backup Data',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          TextButton(
+            onPressed: () {
+              //
+            },
+            child: Text(
+              'Backup Data',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-            TextButton(
-              onPressed: () {
-                DbHelper().removeDatabase();
-              },
-              child: Text(
-                'Remove Database',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+          TextButton(
+            onPressed: () {
+              DbHelper().removeDatabase();
+            },
+            child: Text(
+              'Remove Database',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-            TextButton(
-              onPressed: () => Get.toNamed(Routes.ACCOUNT),
-              child: Text(
-                'Akun',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(Routes.ACCOUNT),
+            child: Text(
+              'Akun',
+              style: TextStyle(
+                color: Colors.black,
               ),
             ),
-            Divider(),
-          ],
-        ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+          ),
+        ],
       ),
     );
   }

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
-import 'package:flutter_sqflite/app/data/models/product_model.dart';
-import 'package:flutter_sqflite/app/data/models/product_with_category_model.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_detail.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_form.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_item.dart';
@@ -46,14 +44,19 @@ class ProductView extends GetView<ProductController> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: DrawerCustom(),
-      floatingActionButton: Card(
-        elevation: 8,
-        color: Colors.blue,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Icon(
-            CupertinoIcons.add,
-            color: Colors.white,
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          ProductForm().showFormBottomSheet(context);
+        },
+        child: Card(
+          elevation: 8,
+          color: Colors.blue,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              CupertinoIcons.add,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -238,142 +241,6 @@ class ProductView extends GetView<ProductController> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showFormBottomSheet(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.only(
-            top: 76,
-            left: 16,
-            right: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            children: [
-              Text(
-                'New Product',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Expanded(
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    shrinkWrap: true,
-                    controller: ScrollController(),
-                    children: [
-                      TextFormField(
-                        textInputAction: TextInputAction.next,
-                        controller: controller.txtName,
-                        validator: (value) {
-                          if (value == '') return 'Enter product name';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          label: Text('Product Name'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      TextFormField(
-                        textInputAction: TextInputAction.next,
-                        controller: controller.txtDescription,
-                        validator: (value) {
-                          if (value == '') return 'Enter product description';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          label: Text('Product Description'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text('Product Category'),
-                      Obx(
-                        () => DropdownButton(
-                          padding: EdgeInsets.all(0),
-                          menuWidth: Get.width,
-                          borderRadius: BorderRadius.circular(12),
-                          hint: Text('Select...'),
-                          isExpanded: true,
-                          value: controller.categoryId.value == 0
-                              ? null
-                              : controller.categoryId.value,
-                          items: controller.categories.map(
-                            (element) {
-                              return DropdownMenuItem(
-                                value: element.id,
-                                child: Text('${element.name}'),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (value) {
-                            controller.categoryId.value = int.parse('${value}');
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 16),
-                width: Get.width,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.blue),
-                    padding: WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (controller.isNew.value == true) {
-                        controller.insertProduct(
-                          Product(
-                            name: controller.txtName.text,
-                            description: controller.txtDescription.text,
-                            categoryId: controller.categoryId.value,
-                            createdAt: DateTime.now().toIso8601String(),
-                            updatedAt: DateTime.now().toIso8601String(),
-                          ),
-                        );
-                      } else {
-                        controller.updateProduct(
-                          Product(
-                            id: controller.product.value.id,
-                            name: controller.txtName.text,
-                            description: controller.txtDescription.text,
-                            categoryId: controller.categoryId.value,
-                            updatedAt: DateTime.now().toIso8601String(),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    '${controller.isNew.value ? 'Save' : 'Update'}',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

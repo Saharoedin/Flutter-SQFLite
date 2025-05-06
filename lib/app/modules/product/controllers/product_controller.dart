@@ -40,7 +40,7 @@ class ProductController extends GetxController {
         await ProductWithCategoryProvider.fetchProductWithCategory();
   }
 
-  void fetchProducts() async {
+  void fetchData() async {
     products.value = await ProductProvider.fetchProducts();
     productsTemp.value = await ProductProvider.fetchProducts();
   }
@@ -59,7 +59,7 @@ class ProductController extends GetxController {
     txtUnitId.text = '${product.value.name}';
   }
 
-  void insertProduct(Product product) async {
+  void insertData(Product product) async {
     await ProductProvider.insert(product);
     fetchProductWithCategory();
     Get.back();
@@ -68,7 +68,7 @@ class ProductController extends GetxController {
     );
   }
 
-  void updateProduct(Product product) async {
+  void updateData(Product product) async {
     await ProductProvider.update(product);
     fetchProductWithCategory();
     Get.back();
@@ -77,7 +77,7 @@ class ProductController extends GetxController {
     );
   }
 
-  void removeProduct(int id) async {
+  void deleteData(int id) async {
     await ProductProvider.remove(id);
     fetchProductWithCategory();
     EasyLoading.showSuccess(
