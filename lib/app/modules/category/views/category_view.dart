@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
 import 'package:flutter_sqflite/app/modules/category/views/category_item.dart';
-import 'package:flutter_sqflite/app/widgets/dialog_confirm.dart';
 import 'package:flutter_sqflite/app/widgets/drawer_custom.dart';
 
 import 'package:get/get.dart';

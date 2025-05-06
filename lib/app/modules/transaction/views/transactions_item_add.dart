@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/modules/transaction/controllers/transaction_controller.dart';
-import 'package:flutter_sqflite/app/modules/transaction/views/transactions_item.dart';
 import 'package:flutter_sqflite/app/modules/transaction/views/transactions_item_search.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
