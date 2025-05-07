@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
 import 'package:intl/intl.dart';
 
 class ProductItem extends StatelessWidget {
-  final VoidCallback onAdd;
+  final ProductMaster product;
+  final VoidCallback onEdit;
   final VoidCallback onDetail;
+
   const ProductItem({
     super.key,
-    required this.onAdd,
+    required this.product,
+    required this.onEdit,
     required this.onDetail,
   });
 
@@ -34,7 +40,7 @@ class ProductItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Paket Geprek Mozarella (Gratis Teh Obeng / Es Kosong)',
+                      '${product.name}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -46,7 +52,7 @@ class ProductItem extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      'Nasi (Bisa Ganti Nasi Daun Jeruk) + Ayam Geprek Mozarella + 3 Pilihan Sambal + Lalapan + Minuman',
+                      '${product.description}',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey.shade800,
@@ -58,7 +64,7 @@ class ProductItem extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      '${NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0).format(35000)}',
+                      '${NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0).format(product.price)}',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black,
@@ -106,7 +112,15 @@ class ProductItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                            image: AssetImage('assets/images/product2.jpg'),
+                            image: product.imagePath == ''
+                                ? AssetImage(
+                                    'assets/images/image-folder.jpg',
+                                  )
+                                : FileImage(
+                                    File(
+                                      '${product.imagePath}',
+                                    ),
+                                  ),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -116,7 +130,7 @@ class ProductItem extends StatelessWidget {
                         left: 8,
                         child: Center(
                           child: ElevatedButton(
-                            onPressed: onAdd,
+                            onPressed: onEdit,
                             style: ButtonStyle(
                               elevation: WidgetStatePropertyAll(0),
                               padding: WidgetStatePropertyAll(
@@ -130,7 +144,7 @@ class ProductItem extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              'Add',
+                              'Edit',
                               style: TextStyle(
                                 color: Colors.blue,
                               ),

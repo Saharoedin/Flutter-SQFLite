@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_detail.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_form.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_item.dart';
@@ -46,6 +47,8 @@ class ProductView extends GetView<ProductController> {
       drawer: DrawerCustom(),
       floatingActionButton: GestureDetector(
         onTap: () {
+          controller.isNew.value = true;
+          controller.clearForm();
           ProductForm().showFormBottomSheet(context);
         },
         child: Card(
@@ -87,8 +90,8 @@ class ProductView extends GetView<ProductController> {
                       onTap: () {
                         controller.category.value =
                             CategoryModel(id: 0, name: 'Semua');
-                        controller.productWithCategories.value =
-                            controller.productWithCategoriesTemp;
+                        controller.listProductMasterTemp.value =
+                            controller.listProductMaster;
                       },
                       child: Obx(
                         () => Container(
@@ -117,14 +120,14 @@ class ProductView extends GetView<ProductController> {
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       controller: ScrollController(),
-                      itemCount: controller.categories.length,
+                      itemCount: controller.listCategory.length,
                       itemBuilder: (context, index) {
-                        CategoryModel category = controller.categories[index];
+                        CategoryModel category = controller.listCategory[index];
                         return GestureDetector(
                           onTap: () {
                             controller.category.value = category;
-                            controller.productWithCategories.value =
-                                controller.productWithCategoriesTemp
+                            controller.listProductMasterTemp.value =
+                                controller.listProductMaster
                                     .where(
                                       (dt) => dt.categoryId == category.id,
                                     )
@@ -178,7 +181,7 @@ class ProductView extends GetView<ProductController> {
                 ),
                 Obx(
                   () => Text(
-                    '${controller.productWithCategories.length}',
+                    '${controller.listProductMasterTemp.length}',
                     style: TextStyle(
                       color: Colors.black,
                       // fontWeight: FontWeight.bold,
@@ -198,31 +201,30 @@ class ProductView extends GetView<ProductController> {
           Expanded(
             child: Obx(
               () {
-                if (controller.productWithCategories.isNotEmpty)
+                if (controller.listProductMasterTemp.isEmpty)
                   return Center(
                     child: Text('Data Not Found!'),
                   );
 
                 return ListView.builder(
-                  itemCount: 10,
+                  itemCount: controller.listProductMasterTemp.length,
                   itemBuilder: (context, index) {
-                    // ProductWithCategory product =
-                    //     controller.productWithCategories[index];
+                    ProductMaster product =
+                        controller.listProductMasterTemp[index];
 
                     return GestureDetector(
                       onTap: () {
-                        // controller.isNew.value = false;
-                        // controller.product.value = product;
-                        // controller.txtName.text = '${product.name}';
-                        // controller.txtDescription.text =
-                        //     '${product.description}';
-                        // controller.categoryId.value =
-                        //     int.parse('${product.categoryId}');
-                        // _showFormBottomSheet(context);
+                        controller.isNew.value = false;
+                        controller.productMaster.value = product;
+                        controller.autoFill();
+                        ProductForm().showFormBottomSheet(context);
                       },
                       child: ProductItem(
-                        onAdd: () {
-                          print('on add');
+                        product: product,
+                        onEdit: () {
+                          controller.productMaster.value = product;
+                          controller.autoFill();
+                          ProductForm().showFormBottomSheet(context);
                         },
                         onDetail: () {
                           showModalBottomSheet(

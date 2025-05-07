@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/product_model.dart';
 
 class ProductProvider extends GetConnect {
-  static Future<List<Product>> fetchProducts() async {
+  static Future<List<Product>> fetchData() async {
     final db = await DbHelper.database;
     final data = await db.query('products');
 
@@ -17,7 +17,7 @@ class ProductProvider extends GetConnect {
         .toList();
   }
 
-  static Future<void> insert(Product product) async {
+  static Future<void> insertData(Product product) async {
     final db = await DbHelper.database;
     await db.insert(
       'products',
@@ -26,7 +26,7 @@ class ProductProvider extends GetConnect {
     );
   }
 
-  static Future<void> update(Product product) async {
+  static Future<void> updateData(Product product) async {
     final db = await DbHelper.database;
     await db.update(
       'products',
@@ -36,7 +36,7 @@ class ProductProvider extends GetConnect {
     );
   }
 
-  static Future<void> remove(int id) async {
+  static Future<void> deleteData(int id) async {
     final db = await DbHelper.database;
     await db.delete(
       'products',

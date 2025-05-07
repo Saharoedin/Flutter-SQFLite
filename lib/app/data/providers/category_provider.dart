@@ -3,7 +3,7 @@ import 'package:flutter_sqflite/app/data/models/category_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CategoryProvider {
-  static Future<List<CategoryModel>> fetchCategories() async {
+  static Future<List<CategoryModel>> fetchData() async {
     final db = await DbHelper.database;
     final data = await db.query('categories');
 

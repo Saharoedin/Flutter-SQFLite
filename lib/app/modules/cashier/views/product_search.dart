@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sqflite/app/modules/product/views/product_detail.dart';
-import 'package:flutter_sqflite/app/modules/product/views/product_item.dart';
+import 'package:flutter_sqflite/app/modules/cashier/views/product_detail.dart';
+import 'package:flutter_sqflite/app/modules/cashier/views/product_item.dart';
 import 'package:get/get.dart';
 
 class ProductSearch extends StatelessWidget {

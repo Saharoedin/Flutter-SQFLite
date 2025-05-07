@@ -1,67 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
 import 'package:flutter_sqflite/app/data/models/product_model.dart';
-import 'package:flutter_sqflite/app/data/models/product_with_category_model.dart';
+import 'package:flutter_sqflite/app/data/models/unit_model.dart';
 import 'package:flutter_sqflite/app/data/providers/category_provider.dart';
+import 'package:flutter_sqflite/app/data/providers/product_master_provider.dart';
 import 'package:flutter_sqflite/app/data/providers/product_provider.dart';
-import 'package:flutter_sqflite/app/data/providers/product_with_category_provider.dart';
+import 'package:flutter_sqflite/app/data/providers/unit_provider.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductController extends GetxController {
   TextEditingController txtName = TextEditingController();
   TextEditingController txtDescription = TextEditingController();
   TextEditingController txtPrice = TextEditingController();
   TextEditingController txtDiscount = TextEditingController();
-  TextEditingController txtCategoryId = TextEditingController();
-  TextEditingController txtUnitId = TextEditingController();
 
-  var products = List<Product>.empty(growable: true).obs;
-  var productsTemp = List<Product>.empty(growable: true).obs;
-  var product = ProductWithCategory().obs;
-  var categories = List<CategoryModel>.empty().obs;
+  var listProductMaster = List<ProductMaster>.empty().obs;
+  var listProductMasterTemp = List<ProductMaster>.empty().obs;
+  var productMaster = ProductMaster().obs;
+
+  var listCategory = List<CategoryModel>.empty().obs;
   var category = CategoryModel().obs;
-  var productWithCategories = List<ProductWithCategory>.empty().obs;
-  var productWithCategoriesTemp = List<ProductWithCategory>.empty().obs;
-
   var categoryId = 0.obs;
+
+  var listUnit = List<Unit>.empty().obs;
+  var unit = Unit().obs;
+  var unitId = 0.obs;
+
   var isNew = true.obs;
+  var imagePath = ''.obs;
+
+  final ImagePicker picker = ImagePicker();
 
   void clearForm() {
     txtName.clear();
     txtDescription.clear();
-    txtCategoryId.clear();
+    txtPrice.clear();
+    txtDiscount.clear();
+    categoryId.value = 0;
+    unitId.value = 0;
+    imagePath.value = '';
   }
 
-  void fetchProductWithCategory() async {
-    productWithCategories.value =
-        await ProductWithCategoryProvider.fetchProductWithCategory();
-    productWithCategoriesTemp.value =
-        await ProductWithCategoryProvider.fetchProductWithCategory();
+  Future<void> pickImage() async {
+    final XFile? image = await picker.pickImage(
+      imageQuality: 70,
+      source: ImageSource.gallery,
+    );
+
+    if (image != null) {
+      imagePath.value = '${image.path}';
+    } else {
+      print("Tidak ada gambar yang dipilih.");
+    }
   }
 
-  void fetchData() async {
-    products.value = await ProductProvider.fetchProducts();
-    productsTemp.value = await ProductProvider.fetchProducts();
+  void fetchProductMaster() async {
+    listProductMaster.value = await ProductMasterProvider.fetchData();
+    listProductMasterTemp.value = await ProductMasterProvider.fetchData();
   }
 
-  void fetchCategories() async {
-    categories.value = await CategoryProvider.fetchCategories();
+  void fetchCategory() async {
+    listCategory.value = await CategoryProvider.fetchData();
     category.value = CategoryModel(id: 0, name: 'Semua');
   }
 
+  void fetchUnit() async {
+    listUnit.value = await UnitProvider.fetchData();
+  }
+
   void autoFill() {
-    txtName.text = '${product.value.name}';
-    txtDescription.text = '${product.value.description}';
-    txtPrice.text = '${product.value.name}';
-    txtDiscount.text = '${product.value.name}';
-    txtCategoryId.text = '${product.value.categoryId}';
-    txtUnitId.text = '${product.value.name}';
+    txtName.text = '${productMaster.value.name}';
+    txtDescription.text = '${productMaster.value.description}';
+    txtPrice.text = '${productMaster.value.price}';
+    txtDiscount.text = '${productMaster.value.discount}';
+    imagePath.value = '${productMaster.value.imagePath}';
+    categoryId.value = int.parse('${productMaster.value.categoryId}');
+    unitId.value = int.parse('${productMaster.value.unitId}');
   }
 
   void insertData(Product product) async {
-    await ProductProvider.insert(product);
-    fetchProductWithCategory();
+    await ProductProvider.insertData(product);
+    fetchProductMaster();
     Get.back();
     EasyLoading.showSuccess(
       'Data successfully added.',
@@ -69,8 +91,8 @@ class ProductController extends GetxController {
   }
 
   void updateData(Product product) async {
-    await ProductProvider.update(product);
-    fetchProductWithCategory();
+    await ProductProvider.updateData(product);
+    fetchProductMaster();
     Get.back();
     EasyLoading.showSuccess(
       'Data successfully updated.',
@@ -78,8 +100,8 @@ class ProductController extends GetxController {
   }
 
   void deleteData(int id) async {
-    await ProductProvider.remove(id);
-    fetchProductWithCategory();
+    await ProductProvider.deleteData(id);
+    fetchProductMaster();
     EasyLoading.showSuccess(
       'Data successfully removed.',
     );
@@ -87,8 +109,9 @@ class ProductController extends GetxController {
 
   @override
   void onInit() {
-    fetchCategories();
-    fetchProductWithCategory();
+    fetchProductMaster();
+    fetchCategory();
+    fetchUnit();
     super.onInit();
   }
 }

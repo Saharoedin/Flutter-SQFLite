@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/product_model.dart';
@@ -150,7 +152,7 @@ class ProductForm extends StatelessWidget {
                                     value: controller.categoryId.value == 0
                                         ? null
                                         : controller.categoryId.value,
-                                    items: controller.categories.map(
+                                    items: controller.listCategory.map(
                                       (element) {
                                         return DropdownMenuItem(
                                           value: element.id,
@@ -197,10 +199,10 @@ class ProductForm extends StatelessWidget {
                                       ),
                                     ),
                                     isExpanded: true,
-                                    value: controller.categoryId.value == 0
+                                    value: controller.unitId.value == 0
                                         ? null
-                                        : controller.categoryId.value,
-                                    items: controller.categories.map(
+                                        : controller.unitId.value,
+                                    items: controller.listUnit.map(
                                       (element) {
                                         return DropdownMenuItem(
                                           value: element.id,
@@ -209,7 +211,7 @@ class ProductForm extends StatelessWidget {
                                       },
                                     ).toList(),
                                     onChanged: (value) {
-                                      controller.categoryId.value =
+                                      controller.unitId.value =
                                           int.parse('${value}');
                                     },
                                   ),
@@ -218,37 +220,67 @@ class ProductForm extends StatelessWidget {
                               SizedBox(
                                 height: 16,
                               ),
+                              Text(
+                                'Upload Image',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
                               Row(
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 16),
-                                    width: 120,
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.grey),
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/product2.jpg'),
+                                  Obx(
+                                    () => Container(
+                                      margin: EdgeInsets.only(right: 16),
+                                      width: 120,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.grey),
+                                        image: DecorationImage(
+                                          image:
+                                              controller.imagePath.value == ''
+                                                  ? AssetImage(
+                                                      'assets/images/image-folder.jpg',
+                                                    )
+                                                  : FileImage(
+                                                      File(
+                                                        '${controller.imagePath.value}',
+                                                      ),
+                                                    ),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Expanded(
-                                    child: Row(
-                                      children: [
-                                        Icon(CupertinoIcons.add_circled),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Text(
-                                          'Add Product Image',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            // fontWeight: FontWeight.bold,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        controller.pickImage();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(CupertinoIcons.add_circled),
+                                          SizedBox(
+                                            width: 4,
                                           ),
-                                        ),
-                                      ],
+                                          Expanded(
+                                            child: Text(
+                                              'Add Product Image',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],
@@ -276,13 +308,41 @@ class ProductForm extends StatelessWidget {
                               if (_formKey.currentState!.validate()) {
                                 if (controller.isNew.value == true) {
                                   controller.insertData(
-                                    Product(name: controller.txtName.text),
+                                    Product(
+                                      name: controller.txtName.text,
+                                      description:
+                                          controller.txtDescription.text,
+                                      price: double.parse(
+                                          '${controller.txtPrice.text}'),
+                                      discount: double.parse(
+                                          '${controller.txtDiscount.text}'),
+                                      categoryId: controller.categoryId.value,
+                                      unitId: controller.unitId.value,
+                                      isCustomizable: 1,
+                                      imagePath: controller.imagePath.value,
+                                      createdAt:
+                                          DateTime.now().toIso8601String(),
+                                      updatedAt:
+                                          DateTime.now().toIso8601String(),
+                                    ),
                                   );
                                 } else {
                                   controller.updateData(
                                     Product(
-                                      id: controller.product.value.id,
+                                      id: controller.productMaster.value.id,
                                       name: controller.txtName.text,
+                                      description:
+                                          controller.txtDescription.text,
+                                      price: double.parse(
+                                          '${controller.txtPrice.text}'),
+                                      discount: double.parse(
+                                          '${controller.txtDiscount.text}'),
+                                      categoryId: controller.categoryId.value,
+                                      unitId: controller.unitId.value,
+                                      isCustomizable: 1,
+                                      imagePath: controller.imagePath.value,
+                                      updatedAt:
+                                          DateTime.now().toIso8601String(),
                                     ),
                                   );
                                 }
@@ -351,6 +411,9 @@ class TextFormFieldCustom extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),

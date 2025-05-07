@@ -2,12 +2,12 @@
   "id": 1,
   "name": "name",
   "description": "description",
-  "price": 100.5,
+  "price": 100,
   "discount": 0.1,
   "category_id": 1,
+  "category_name": "category name",
   "unit_id": 1,
+  "unit_name": "unit_name",
   "image_path": "image_path",
-  "is_customizable": 1,
-  "created_at": "created_at",
-  "updated_at": "updated_at"
+  "is_customizable": 1
 }

@@ -34,12 +34,12 @@ class CashierController extends GetxController {
   }
 
   void fetchData() async {
-    products.value = await ProductProvider.fetchProducts();
-    productsTemp.value = await ProductProvider.fetchProducts();
+    products.value = await ProductProvider.fetchData();
+    productsTemp.value = await ProductProvider.fetchData();
   }
 
   void fetchCategories() async {
-    categories.value = await CategoryProvider.fetchCategories();
+    categories.value = await CategoryProvider.fetchData();
     category.value = CategoryModel(id: 0, name: 'Semua');
   }
 

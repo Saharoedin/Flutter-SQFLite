@@ -15,7 +15,7 @@ class CategoryController extends GetxController {
   }
 
   void fetchCategory() async {
-    categories.value = await CategoryProvider.fetchCategories();
+    categories.value = await CategoryProvider.fetchData();
   }
 
   void insertData(CategoryModel category) async {

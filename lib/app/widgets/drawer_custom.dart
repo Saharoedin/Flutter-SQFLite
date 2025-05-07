@@ -225,7 +225,9 @@ class DrawerCustom extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(Routes.UNIT),
+                  onTap: () async {
+                    await DbHelper().removeDatabase();
+                  },
                   child: ListTile(
                     shape: Border(
                       bottom: BorderSide(

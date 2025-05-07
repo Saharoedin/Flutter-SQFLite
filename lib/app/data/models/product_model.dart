@@ -1,9 +1,13 @@
 class Product {
-  int? id;
+  num? id;
   String? name;
   String? description;
-  int? price;
+  num? price;
+  num? discount;
   num? categoryId;
+  num? unitId;
+  String? imagePath;
+  num? isCustomizable;
   String? createdAt;
   String? updatedAt;
 
@@ -12,17 +16,25 @@ class Product {
     this.name,
     this.description,
     this.price,
+    this.discount,
     this.categoryId,
+    this.unitId,
+    this.imagePath,
+    this.isCustomizable,
     this.createdAt,
     this.updatedAt,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] as num?;
     name = json['name'];
     description = json['description'];
-    price = json['pric'];
-    categoryId = json['category_id'];
+    price = json['price'] as num?;
+    discount = json['discount'] as num?;
+    categoryId = json['category_id'] as num?;
+    unitId = json['unit_id'] as num?;
+    imagePath = json['image_path'];
+    isCustomizable = json['is_customizable'] as num?;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -33,7 +45,11 @@ class Product {
     data['name'] = name;
     data['description'] = description;
     data['price'] = price;
+    data['discount'] = discount;
     data['category_id'] = categoryId;
+    data['unit_id'] = unitId;
+    data['image_path'] = imagePath;
+    data['is_customizable'] = isCustomizable;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
@@ -41,7 +57,10 @@ class Product {
 
   static List<Product> fromJsonList(List? data) {
     if (data == null || data.isEmpty) return List<Product>.empty();
-
-    return data.map((e) => Product.fromJson(e)).toList();
+    return data
+        .map(
+          (e) => Product.fromJson(e),
+        )
+        .toList();
   }
 }

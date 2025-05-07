@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/modules/product/controllers/product_controller.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_detail.dart';
+import 'package:flutter_sqflite/app/modules/product/views/product_form.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_item.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +17,7 @@ class ProductSearch extends StatelessWidget {
 
   void showFormBottomSheet(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+    var controller = Get.put(ProductController());
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.white,
@@ -79,22 +83,18 @@ class ProductSearch extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: 10,
                     itemBuilder: (context, index) {
-                      // ProductWithCategory product =
-                      //     controller.productWithCategories[index];
-
+                      ProductMaster product =
+                          controller.listProductMasterTemp[index];
                       return GestureDetector(
                         onTap: () {
-                          // controller.isNew.value = false;
-                          // controller.product.value = product;
-                          // controller.txtName.text = '${product.name}';
-                          // controller.txtDescription.text =
-                          //     '${product.description}';
-                          // controller.categoryId.value =
-                          //     int.parse('${product.categoryId}');
-                          // _showFormBottomSheet(context);
+                          controller.isNew.value = false;
+                          controller.productMaster.value = product;
+                          controller.autoFill();
+                          ProductForm().showFormBottomSheet(context);
                         },
                         child: ProductItem(
-                          onAdd: () {
+                          product: product,
+                          onEdit: () {
                             print('on add');
                           },
                           onDetail: () {

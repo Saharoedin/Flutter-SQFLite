@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/modules/product/views/product_form.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -72,106 +73,23 @@ class ProductDetail extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         SizedBox(
-          height: 12,
-        ),
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade200),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.heart,
-                    size: 14,
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    'Save',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Spacer(),
-            Container(
-              margin: EdgeInsets.only(right: 16),
-              padding: EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade200),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.info_circle_fill,
-                    size: 14,
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    'Report',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade200),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.share,
-                    size: 14,
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    'Share',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 32,
+          height: 16,
         ),
         SizedBox(
           width: Get.width,
           child: ElevatedButton(
             onPressed: () {
-              //
+              ProductForm().showFormBottomSheet(context);
             },
             style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(Colors.blue),
-            ),
+                backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                shape: WidgetStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                )),
             child: Text(
-              'Add to cart',
+              'Edit Product',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

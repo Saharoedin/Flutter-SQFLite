@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "name": "name",
+  "description": "description",
+  "price": 100,
+  "discount": 0.1,
+  "category_name": "category name",
+  "unit_name": "unit_name",
+  "image_path": "image_path",
+  "is_customizable": 1
+}
