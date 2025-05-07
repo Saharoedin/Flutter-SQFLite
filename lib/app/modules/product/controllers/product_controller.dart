@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
@@ -10,6 +12,8 @@ import 'package:flutter_sqflite/app/data/providers/product_provider.dart';
 import 'package:flutter_sqflite/app/data/providers/unit_provider.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class ProductController extends GetxController {
   TextEditingController txtName = TextEditingController();
@@ -51,7 +55,19 @@ class ProductController extends GetxController {
     );
 
     if (image != null) {
-      imagePath.value = '${image.path}';
+      final appDir = await getApplicationDocumentsDirectory();
+
+      // Ambil hanya nama file, bukan path lengkap
+      final fileName = path.basename(image.path);
+
+      // Gabungkan dengan path aplikasi
+      final savedImagePath = path.join(appDir.path, fileName);
+
+      // Salin file ke direktori permanen
+      final savedImage = await File(image.path).copy(savedImagePath);
+
+      // Simpan path baru
+      imagePath.value = savedImage.path;
     } else {
       print("Tidak ada gambar yang dipilih.");
     }

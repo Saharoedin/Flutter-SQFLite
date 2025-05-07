@@ -33,13 +33,15 @@ class ProductForm extends StatelessWidget {
               Stack(
                 children: [
                   Center(
-                    child: Text(
-                      '${controller.isNew.value == true ? 'New Product' : 'Edit Product'}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
+                    child: Obx(
+                      () => Text(
+                        '${controller.isNew.value == true ? 'New Product' : 'Edit Product'}',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                   Row(

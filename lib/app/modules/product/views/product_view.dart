@@ -49,6 +49,8 @@ class ProductView extends GetView<ProductController> {
         onTap: () {
           controller.isNew.value = true;
           controller.clearForm();
+          controller.fetchCategory();
+          controller.fetchUnit();
           ProductForm().showFormBottomSheet(context);
         },
         child: Card(
@@ -222,6 +224,7 @@ class ProductView extends GetView<ProductController> {
                       child: ProductItem(
                         product: product,
                         onEdit: () {
+                          controller.isNew.value = false;
                           controller.productMaster.value = product;
                           controller.autoFill();
                           ProductForm().showFormBottomSheet(context);
