@@ -155,7 +155,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(Routes.UNIT),
+                  onTap: () => Get.toNamed(Routes.CATEGORY),
                   child: ListTile(
                     shape: Border(
                       bottom: BorderSide(
@@ -173,7 +173,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(Routes.UNIT),
+                  onTap: () => Get.toNamed(Routes.PRODUCT),
                   child: ListTile(
                     shape: Border(
                       bottom: BorderSide(
