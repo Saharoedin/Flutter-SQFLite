@@ -48,6 +48,7 @@ class ProductSearch extends StatelessWidget {
                         },
                         decoration: InputDecoration(
                           hintText: 'Type some text here  ...',
+                          hintStyle: TextStyle(fontWeight: FontWeight.normal),
                           suffixIcon: Icon(CupertinoIcons.search),
                           filled: true,
                           fillColor: Colors.white,

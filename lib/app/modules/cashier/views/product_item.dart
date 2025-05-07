@@ -18,7 +18,7 @@ class ProductItem extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.all(0),
         shape: Border(
-          bottom: BorderSide(
+          top: BorderSide(
             color: Colors.grey.shade100,
           ),
         ),

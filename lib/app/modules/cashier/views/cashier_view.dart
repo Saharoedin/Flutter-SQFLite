@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
+import 'package:flutter_sqflite/app/modules/cashier/views/cart_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/detail_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_detail.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_item.dart';
@@ -32,7 +33,12 @@ class CashierView extends GetView<CashierController> {
             padding: EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
-                ProductSearch().showFormBottomSheet(context);
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  backgroundColor: Colors.white,
+                  context: context,
+                  builder: (context) => CartOrder(),
+                );
               },
               child: Icon(
                 CupertinoIcons.cart,
@@ -185,12 +191,6 @@ class CashierView extends GetView<CashierController> {
                   ),
                 ),
               ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(
-              color: Colors.grey.shade200,
             ),
           ),
           Expanded(

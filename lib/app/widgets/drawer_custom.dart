@@ -49,6 +49,7 @@ class DrawerCustom extends StatelessWidget {
           ),
           Expanded(
             child: ListView(
+              padding: EdgeInsets.all(0),
               shrinkWrap: true,
               controller: ScrollController(),
               children: [

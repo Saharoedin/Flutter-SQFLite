@@ -14,6 +14,17 @@ class CashierController extends GetxController {
   var category = CategoryModel().obs;
   var productWithCategories = List<ProductWithCategory>.empty().obs;
   var productWithCategoriesTemp = List<ProductWithCategory>.empty().obs;
+  var orderStatus = 'All Orders'.obs;
+  var listOrderStatus = [
+    'All Orders',
+    'Ordering',
+    'Placed',
+    'Cooking',
+    'Ready',
+    'Served',
+    'Unpaid',
+    'Paid'
+  ];
 
   void fetchProductWithCategory() async {
     productWithCategories.value =
