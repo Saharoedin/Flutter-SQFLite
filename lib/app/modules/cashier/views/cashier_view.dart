@@ -5,6 +5,7 @@ import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
 import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
 import 'package:flutter_sqflite/app/data/models/transaction_detail_model.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/cart_order.dart';
+import 'package:flutter_sqflite/app/modules/cashier/views/customize_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/detail_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_detail.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_item.dart';
@@ -226,9 +227,27 @@ class CashierView extends GetView<CashierController> {
                       child: ProductItem(
                         product: product,
                         onAdd: () {
-                          product.picked = (product.picked ?? 0) + 1;
-                          controller.listProductMasterTransactionTemp.refresh();
-                          controller.addProductDetail(product);
+                          if (product.picked == 0) {
+                            product.picked = (product.picked ?? 0) + 1;
+                            controller.listProductMasterTransactionTemp
+                                .refresh();
+                            controller.addProductDetail(product);
+                          } else {
+                            if (product.isCustomizable == 1) {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.white,
+                                context: context,
+                                builder: (context) => CustomizeOrder(
+                                  product: product,
+                                ),
+                              );
+                            } else {
+                              product.picked = (product.picked ?? 0) + 1;
+                              controller.listProductMasterTransactionTemp
+                                  .refresh();
+                            }
+                          }
                         },
                         onDetail: () {
                           showModalBottomSheet(
