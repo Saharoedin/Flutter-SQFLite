@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
 import 'package:intl/intl.dart';
 
 class ProductItem extends StatelessWidget {
-  final ProductMaster product;
+  final ProductMasterTransaction product;
   final VoidCallback onAdd;
   final VoidCallback onDetail;
   const ProductItem({
@@ -107,71 +108,84 @@ class ProductItem extends StatelessWidget {
                   height: 200,
                   child: Stack(
                     children: [
-                      Container(
-                        height: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                            image: product.imagePath == ''
-                                ? AssetImage('assets/images/image-folder.jpg')
-                                : FileImage(
-                                    File('${product.imagePath}'),
-                                  ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 28,
-                        left: 8,
-                        child: Center(
-                          child: ElevatedButton(
-                            onPressed: onAdd,
-                            style: ButtonStyle(
-                              elevation: WidgetStatePropertyAll(0),
-                              padding: WidgetStatePropertyAll(
-                                EdgeInsets.symmetric(horizontal: 40),
-                              ),
-                              backgroundColor: WidgetStatePropertyAll(
-                                Colors.white,
-                              ),
-                              side: WidgetStatePropertyAll(
-                                BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                            child: Text(
-                              'Add',
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 12,
-                        child: Center(
-                          child: Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.pencil_outline,
-                                size: 16,
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                product.isCustomizable == 1
-                                    ? 'Customizable'
-                                    : 'Uncustomizable',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
+                      Column(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              height: 120,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                  image: product.imagePath == ''
+                                      ? AssetImage(
+                                          'assets/images/image-folder.jpg')
+                                      : FileImage(
+                                          File('${product.imagePath}'),
+                                        ),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
+                          Expanded(child: Container()),
+                        ],
+                      ),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(child: Container()),
+                            ElevatedButton(
+                              onPressed: onAdd,
+                              style: ButtonStyle(
+                                elevation: WidgetStatePropertyAll(0),
+                                padding: WidgetStatePropertyAll(
+                                  EdgeInsets.symmetric(
+                                    horizontal: product.picked == 0 ? 36 : 24,
+                                  ),
+                                ),
+                                backgroundColor: WidgetStatePropertyAll(
+                                  Colors.white,
+                                ),
+                                side: WidgetStatePropertyAll(
+                                  BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                              child: Text(
+                                product.picked == 0
+                                    ? 'Add'
+                                    : '${NumberFormat.decimalPattern().format(product.picked)} items',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.pencil_outline,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  product.isCustomizable == 1
+                                      ? 'Customizable'
+                                      : 'Uncustomizable',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ],

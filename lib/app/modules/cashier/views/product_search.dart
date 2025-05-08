@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
 import 'package:flutter_sqflite/app/modules/cashier/controllers/cashier_controller.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_detail.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_item.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class ProductSearch extends StatelessWidget {
   const ProductSearch({super.key});
@@ -50,8 +52,8 @@ class ProductSearch extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         onChanged: (value) {
-                          controller.listProductMasterTemp.value =
-                              controller.listProductMaster
+                          controller.listProductMasterTransactionTemp.value =
+                              controller.listProductMasterTransaction
                                   .where(
                                     (dt) => dt.name!
                                         .isCaseInsensitiveContainsAny(value),
@@ -90,37 +92,47 @@ class ProductSearch extends StatelessWidget {
                 child: Container(
                   color: Colors.white,
                   child: Obx(
-                    () => ListView.builder(
-                      shrinkWrap: true,
-                      controller: ScrollController(),
-                      itemCount: controller.listProductMasterTemp.length,
-                      itemBuilder: (context, index) {
-                        ProductMaster product =
-                            controller.listProductMasterTemp[index];
+                    () => controller.listProductMasterTransactionTemp.isEmpty
+                        ? Center(
+                            child: Container(
+                              width: Get.width * 0.7,
+                              child: LottieBuilder.asset(
+                                'assets/lotties/empty.json',
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            controller: ScrollController(),
+                            itemCount: controller
+                                .listProductMasterTransactionTemp.length,
+                            itemBuilder: (context, index) {
+                              ProductMasterTransaction product = controller
+                                  .listProductMasterTransactionTemp[index];
 
-                        return GestureDetector(
-                          onTap: () {
-                            //
-                          },
-                          child: ProductItem(
-                            product: product,
-                            onAdd: () {
-                              print('on add');
-                            },
-                            onDetail: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                backgroundColor: Colors.white,
-                                context: context,
-                                builder: (context) => ProductDetail(
+                              return GestureDetector(
+                                onTap: () {
+                                  //
+                                },
+                                child: ProductItem(
                                   product: product,
+                                  onAdd: () {
+                                    print('on add');
+                                  },
+                                  onDetail: () {
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.white,
+                                      context: context,
+                                      builder: (context) => ProductDetail(
+                                        product: product,
+                                      ),
+                                    );
+                                  },
                                 ),
                               );
                             },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ),
               ),

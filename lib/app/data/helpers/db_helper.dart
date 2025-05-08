@@ -52,6 +52,7 @@ class DbHelper {
         price REAL,
         image_path TEXT NULL,
         discount REAL,
+        picked REAL,
         unit_id INTEGER,
         is_customizable INTEGER,
         category_id INTEGER,
@@ -87,7 +88,6 @@ class DbHelper {
         qty INTEGER,
         price REAL,
         discount REAL,
-        tax REAL,
         total REAL,
         FOREIGN KEY (transaction_id) REFERENCES transactions(id),
         FOREIGN KEY (product_id) REFERENCES products(id)

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
 import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
+import 'package:flutter_sqflite/app/data/models/transaction_detail_model.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/cart_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/detail_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_detail.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_sqflite/app/widgets/drawer_custom.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../controllers/cashier_controller.dart';
 
@@ -92,8 +95,8 @@ class CashierView extends GetView<CashierController> {
                     onTap: () {
                       controller.category.value =
                           CategoryModel(id: 0, name: 'Semua');
-                      controller.listProductMasterTemp.value =
-                          controller.listProductMaster;
+                      controller.listProductMasterTransactionTemp.value =
+                          controller.listProductMasterTransaction;
                     },
                     child: Obx(
                       () => Container(
@@ -129,8 +132,8 @@ class CashierView extends GetView<CashierController> {
                         return GestureDetector(
                           onTap: () {
                             controller.category.value = category;
-                            controller.listProductMasterTemp.value =
-                                controller.listProductMaster
+                            controller.listProductMasterTransactionTemp.value =
+                                controller.listProductMasterTransaction
                                     .where(
                                       (dt) => dt.categoryId == category.id,
                                     )
@@ -184,7 +187,7 @@ class CashierView extends GetView<CashierController> {
                 ),
                 Obx(
                   () => Text(
-                    '${controller.listProductMasterTemp.length}',
+                    '${controller.listProductMasterTransactionTemp.length}',
                     style: TextStyle(
                       color: Colors.black,
                       // fontWeight: FontWeight.bold,
@@ -198,27 +201,34 @@ class CashierView extends GetView<CashierController> {
           Expanded(
             child: Obx(
               () {
-                if (controller.listProductMasterTemp.isEmpty)
+                if (controller.listProductMasterTransactionTemp.isEmpty)
                   return Center(
-                    child: Text('Data Not Found!'),
+                    child: Container(
+                      width: Get.width * 0.7,
+                      child: LottieBuilder.asset(
+                        'assets/lotties/empty.json',
+                      ),
+                    ),
                   );
 
                 return ListView.builder(
                   shrinkWrap: true,
                   controller: ScrollController(),
-                  itemCount: controller.listProductMasterTemp.length,
+                  itemCount: controller.listProductMasterTransactionTemp.length,
                   itemBuilder: (context, index) {
-                    ProductMaster product =
-                        controller.listProductMasterTemp[index];
+                    ProductMasterTransaction product =
+                        controller.listProductMasterTransactionTemp[index];
 
                     return GestureDetector(
                       onTap: () {
-                        controller.productMaster.value = product;
+                        controller.productMasterTransaction.value = product;
                       },
                       child: ProductItem(
                         product: product,
                         onAdd: () {
-                          print('on add');
+                          product.picked = (product.picked ?? 0) + 1;
+                          controller.listProductMasterTransactionTemp.refresh();
+                          controller.addProductDetail(product);
                         },
                         onDetail: () {
                           showModalBottomSheet(
@@ -237,67 +247,71 @@ class CashierView extends GetView<CashierController> {
               },
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(
-              top: 16,
-              left: 16,
-              right: 16,
-              bottom: 24,
-            ),
-            color: Colors.grey.shade100,
-            width: Get.width,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Grand Total',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
+          Obx(
+            () => controller.listDetailTransaction.isEmpty
+                ? SizedBox()
+                : Container(
+                    padding: EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                      bottom: 24,
+                    ),
+                    color: Colors.grey.shade100,
+                    width: Get.width,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Grand Total',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                '${NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0).format(1000)}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0).format(1000)}',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      backgroundColor: Colors.blue,
-                      context: context,
-                      builder: (context) => DetailOrder(),
-                    );
-                  },
-                  style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Colors.blue,
-                      ),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      )),
-                  child: Text(
-                    'Checkout',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                        ElevatedButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.blue,
+                              context: context,
+                              builder: (context) => DetailOrder(),
+                            );
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                Colors.blue,
+                              ),
+                              shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              )),
+                          child: Text(
+                            'Checkout',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
           ),
         ],
       ),

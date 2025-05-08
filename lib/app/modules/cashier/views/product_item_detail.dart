@@ -1,18 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
+import 'package:flutter_sqflite/app/modules/cashier/controllers/cashier_controller.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ProductItemDetail extends StatelessWidget {
+  final ProductMasterTransaction product;
   final VoidCallback onAdd;
   final VoidCallback onDetail;
   const ProductItemDetail({
     super.key,
+    required this.product,
     required this.onAdd,
     required this.onDetail,
   });
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(CashierController());
     return GestureDetector(
       onTap: onDetail,
       child: Card(
@@ -35,7 +43,7 @@ class ProductItemDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Paket Geprek Mozarella (Gratis Teh Obeng / Es Kosong)',
+                      '${product.name}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -47,7 +55,7 @@ class ProductItemDetail extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      '${NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0).format(35000)}',
+                      '${NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0).format(product.price)}',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey.shade800,
@@ -106,7 +114,11 @@ class ProductItemDetail extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                            image: AssetImage('assets/images/product2.jpg'),
+                            image: product.imagePath == ''
+                                ? AssetImage('assets/images/image-folder.jpg')
+                                : FileImage(
+                                    File('${product.imagePath}'),
+                                  ),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -115,22 +127,22 @@ class ProductItemDetail extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 14),
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.blue,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
+                          GestureDetector(
+                            onTap: () {
+                              product.picked = (product.picked ?? 0) - 1;
+                              controller.listDetailTransaction.refresh();
+                            },
                             child: Icon(
-                              CupertinoIcons.add,
-                              size: 20,
+                              CupertinoIcons.minus_circle,
+                              color: Colors.blue,
+                              size: 28,
                             ),
                           ),
+                          SizedBox(
+                            width: 12,
+                          ),
                           Text(
-                            '1',
+                            '${NumberFormat.decimalPattern().format(product.picked)}',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -139,20 +151,20 @@ class ProductItemDetail extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Container(
-                            margin: EdgeInsets.only(left: 16),
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.blue,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Icon(
-                              CupertinoIcons.minus,
-                              size: 20,
-                            ),
+                          SizedBox(
+                            width: 12,
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              product.picked = (product.picked ?? 0) + 1;
+                              controller.listDetailTransaction.refresh();
+                            },
+                            child: Icon(
+                              CupertinoIcons.add_circled,
+                              color: Colors.blue,
+                              size: 28,
+                            ),
+                          )
                         ],
                       )
                     ],

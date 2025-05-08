@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
 import 'package:flutter_sqflite/app/modules/cashier/controllers/cashier_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetail extends StatelessWidget {
-  final ProductMaster product;
+  final ProductMasterTransaction product;
   const ProductDetail({
     super.key,
     required this.product,

@@ -357,6 +357,7 @@ class ProductForm extends StatelessWidget {
                                                   true
                                               ? 1
                                               : 0,
+                                      picked: 0,
                                       imagePath: controller.imagePath.value,
                                       createdAt:
                                           DateTime.now().toIso8601String(),
@@ -382,6 +383,7 @@ class ProductForm extends StatelessWidget {
                                                   true
                                               ? 1
                                               : 0,
+                                      picked: 0,
                                       imagePath: controller.imagePath.value,
                                       updatedAt:
                                           DateTime.now().toIso8601String(),

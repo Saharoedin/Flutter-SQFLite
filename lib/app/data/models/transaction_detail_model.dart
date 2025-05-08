@@ -1,12 +1,11 @@
 class TransactionDetail {
-  num? id;
-  num? transactionId;
-  num? productId;
-  num? qty;
-  num? price;
-  num? discount;
-  num? tax;
-  num? total;
+  int? id;
+  int? transactionId;
+  int? productId;
+  int? qty;
+  double? price;
+  double? discount;
+  double? total;
 
   TransactionDetail({
     this.id,
@@ -15,19 +14,17 @@ class TransactionDetail {
     this.qty,
     this.price,
     this.discount,
-    this.tax,
     this.total,
   });
 
   TransactionDetail.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as num?;
-    transactionId = json['transaction_id'] as num?;
-    productId = json['product_id'] as num?;
-    qty = json['qty'] as num?;
-    price = json['price'] as num?;
-    discount = json['discount'] as num?;
-    tax = json['tax'] as num?;
-    total = json['total'] as num?;
+    id = json['id'];
+    transactionId = json['transaction_id'];
+    productId = json['product_id'];
+    qty = json['qty'];
+    price = json['price'];
+    discount = json['discount'];
+    total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
@@ -38,7 +35,6 @@ class TransactionDetail {
     data['qty'] = qty;
     data['price'] = price;
     data['discount'] = discount;
-    data['tax'] = tax;
     data['total'] = total;
     return data;
   }

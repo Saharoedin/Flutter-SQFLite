@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_transaction_model.dart';
+import 'package:flutter_sqflite/app/modules/cashier/controllers/cashier_controller.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_item_detail.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,7 @@ class DetailOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+    var controller = Get.put(CashierController());
     return Container(
       padding: EdgeInsets.only(
         top: 76,
@@ -134,25 +137,30 @@ class DetailOrder extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    controller: ScrollController(),
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          //
-                        },
-                        child: ProductItemDetail(
-                          onAdd: () {
-                            print('on add');
-                          },
-                          onDetail: () {
+                  Obx(
+                    () => ListView.builder(
+                      shrinkWrap: true,
+                      controller: ScrollController(),
+                      itemCount: controller.listDetailTransaction.length,
+                      itemBuilder: (context, index) {
+                        ProductMasterTransaction product =
+                            controller.listDetailTransaction[index];
+                        return GestureDetector(
+                          onTap: () {
                             //
                           },
-                        ),
-                      );
-                    },
+                          child: ProductItemDetail(
+                            product: product,
+                            onAdd: () {
+                              print('on add');
+                            },
+                            onDetail: () {
+                              //
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
