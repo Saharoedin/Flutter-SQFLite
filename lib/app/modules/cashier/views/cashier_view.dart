@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/cart_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/detail_order.dart';
 import 'package:flutter_sqflite/app/modules/cashier/views/product_detail.dart';
@@ -51,6 +52,7 @@ class CashierView extends GetView<CashierController> {
             padding: EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
+                controller.fetchProductMaster();
                 ProductSearch().showFormBottomSheet(context);
               },
               child: Icon(
@@ -82,53 +84,53 @@ class CashierView extends GetView<CashierController> {
             margin: EdgeInsets.only(bottom: 16, top: 16),
             height: 34,
             width: Get.width,
-            child: Obx(
-              () => SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.category.value =
-                            CategoryModel(id: 0, name: 'Semua');
-                        controller.productWithCategories.value =
-                            controller.productWithCategoriesTemp;
-                      },
-                      child: Obx(
-                        () => Container(
-                          margin: EdgeInsets.only(left: 16),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.category.value =
+                          CategoryModel(id: 0, name: 'Semua');
+                      controller.listProductMasterTemp.value =
+                          controller.listProductMaster;
+                    },
+                    child: Obx(
+                      () => Container(
+                        margin: EdgeInsets.only(left: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: controller.category.value.id == 0
+                              ? Colors.blue
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.blue),
+                        ),
+                        child: Text(
+                          'Semua',
+                          style: TextStyle(
                             color: controller.category.value.id == 0
-                                ? Colors.blue
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.blue),
-                          ),
-                          child: Text(
-                            'Semua',
-                            style: TextStyle(
-                              color: controller.category.value.id == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
                     ),
-                    ListView.builder(
+                  ),
+                  Obx(
+                    () => ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       controller: ScrollController(),
-                      itemCount: controller.categories.length,
+                      itemCount: controller.listCategory.length,
                       itemBuilder: (context, index) {
-                        CategoryModel category = controller.categories[index];
+                        CategoryModel category = controller.listCategory[index];
                         return GestureDetector(
                           onTap: () {
                             controller.category.value = category;
-                            controller.productWithCategories.value =
-                                controller.productWithCategoriesTemp
+                            controller.listProductMasterTemp.value =
+                                controller.listProductMaster
                                     .where(
                                       (dt) => dt.categoryId == category.id,
                                     )
@@ -161,8 +163,8 @@ class CashierView extends GetView<CashierController> {
                         );
                       },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -182,7 +184,7 @@ class CashierView extends GetView<CashierController> {
                 ),
                 Obx(
                   () => Text(
-                    '${controller.productWithCategories.length}',
+                    '${controller.listProductMasterTemp.length}',
                     style: TextStyle(
                       color: Colors.black,
                       // fontWeight: FontWeight.bold,
@@ -196,29 +198,25 @@ class CashierView extends GetView<CashierController> {
           Expanded(
             child: Obx(
               () {
-                if (controller.productWithCategories.isNotEmpty)
+                if (controller.listProductMasterTemp.isEmpty)
                   return Center(
                     child: Text('Data Not Found!'),
                   );
 
                 return ListView.builder(
-                  itemCount: 10,
+                  shrinkWrap: true,
+                  controller: ScrollController(),
+                  itemCount: controller.listProductMasterTemp.length,
                   itemBuilder: (context, index) {
-                    // ProductWithCategory product =
-                    //     controller.productWithCategories[index];
+                    ProductMaster product =
+                        controller.listProductMasterTemp[index];
 
                     return GestureDetector(
                       onTap: () {
-                        // controller.isNew.value = false;
-                        // controller.product.value = product;
-                        // controller.txtName.text = '${product.name}';
-                        // controller.txtDescription.text =
-                        //     '${product.description}';
-                        // controller.categoryId.value =
-                        //     int.parse('${product.categoryId}');
-                        // _showFormBottomSheet(context);
+                        controller.productMaster.value = product;
                       },
                       child: ProductItem(
+                        product: product,
                         onAdd: () {
                           print('on add');
                         },
@@ -227,7 +225,9 @@ class CashierView extends GetView<CashierController> {
                             isScrollControlled: true,
                             backgroundColor: Colors.white,
                             context: context,
-                            builder: (context) => ProductDetail(),
+                            builder: (context) => ProductDetail(
+                              product: product,
+                            ),
                           );
                         },
                       ),

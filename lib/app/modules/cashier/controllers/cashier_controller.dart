@@ -1,19 +1,18 @@
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
-import 'package:flutter_sqflite/app/data/models/product_model.dart';
-import 'package:flutter_sqflite/app/data/models/product_with_category_model.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
 import 'package:flutter_sqflite/app/data/providers/category_provider.dart';
-import 'package:flutter_sqflite/app/data/providers/product_provider.dart';
-import 'package:flutter_sqflite/app/data/providers/product_with_category_provider.dart';
+import 'package:flutter_sqflite/app/data/providers/product_master_provider.dart';
 import 'package:get/get.dart';
 
 class CashierController extends GetxController {
-  var products = List<Product>.empty(growable: true).obs;
-  var productsTemp = List<Product>.empty(growable: true).obs;
-  var product = ProductWithCategory().obs;
-  var categories = List<CategoryModel>.empty().obs;
+  var listProductMaster = List<ProductMaster>.empty().obs;
+  var listProductMasterTemp = List<ProductMaster>.empty().obs;
+  var productMaster = ProductMaster().obs;
+
+  var listCategory = List<CategoryModel>.empty().obs;
+  var listCategoryTemp = List<CategoryModel>.empty().obs;
   var category = CategoryModel().obs;
-  var productWithCategories = List<ProductWithCategory>.empty().obs;
-  var productWithCategoriesTemp = List<ProductWithCategory>.empty().obs;
+
   var orderStatus = 'All Orders'.obs;
   var listOrderStatus = [
     'All Orders',
@@ -26,37 +25,20 @@ class CashierController extends GetxController {
     'Paid'
   ];
 
-  void fetchProductWithCategory() async {
-    productWithCategories.value =
-        await ProductWithCategoryProvider.fetchProductWithCategory();
-    productWithCategoriesTemp.value =
-        await ProductWithCategoryProvider.fetchProductWithCategory();
+  void fetchProductMaster() async {
+    listProductMaster.value = await ProductMasterProvider.fetchData();
+    listProductMasterTemp.value = await ProductMasterProvider.fetchData();
   }
 
-  void fetchData() async {
-    products.value = await ProductProvider.fetchData();
-    productsTemp.value = await ProductProvider.fetchData();
-  }
-
-  void fetchCategories() async {
-    categories.value = await CategoryProvider.fetchData();
+  void fetchCategory() async {
+    listCategory.value = await CategoryProvider.fetchData();
     category.value = CategoryModel(id: 0, name: 'Semua');
   }
 
   @override
   void onInit() {
-    fetchProductWithCategory();
-    fetchCategories();
+    fetchCategory();
+    fetchProductMaster();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 }
