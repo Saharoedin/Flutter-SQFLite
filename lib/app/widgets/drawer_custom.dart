@@ -190,6 +190,24 @@ class DrawerCustom extends StatelessWidget {
                     ),
                   ),
                 ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.PAYMENT_METHOD),
+                  child: ListTile(
+                    shape: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey.shade200,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.only(left: 16),
+                    leading: Icon(CupertinoIcons.creditcard),
+                    title: Text(
+                      'Payment Methods',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
                 Container(
                   width: Get.width,
                   padding: EdgeInsets.symmetric(

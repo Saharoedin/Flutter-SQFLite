@@ -6,14 +6,14 @@ import '../modules/cashier/bindings/cashier_binding.dart';
 import '../modules/cashier/views/cashier_view.dart';
 import '../modules/category/bindings/category_binding.dart';
 import '../modules/category/views/category_view.dart';
+import '../modules/payment_method/bindings/payment_method_binding.dart';
+import '../modules/payment_method/views/payment_method_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view.dart';
 import '../modules/report/bindings/report_binding.dart';
 import '../modules/report/views/report_view.dart';
 import '../modules/stock/bindings/stock_binding.dart';
 import '../modules/stock/views/stock_view.dart';
-import '../modules/transaction/bindings/transaction_binding.dart';
-import '../modules/transaction/views/transactions_view.dart';
 import '../modules/unit/bindings/unit_binding.dart';
 import '../modules/unit/views/unit_view.dart';
 
@@ -34,11 +34,6 @@ class AppPages {
       name: _Paths.PRODUCT,
       page: () => const ProductView(),
       binding: ProductBinding(),
-    ),
-    GetPage(
-      name: _Paths.TRANSACTION,
-      page: () => const TransactionView(),
-      binding: TransactionBinding(),
     ),
     GetPage(
       name: _Paths.CASHIER,
@@ -64,6 +59,11 @@ class AppPages {
       name: _Paths.STOCK,
       page: () => const StockView(),
       binding: StockBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_METHOD,
+      page: () => const PaymentMethodView(),
+      binding: PaymentMethodBinding(),
     ),
   ];
 }

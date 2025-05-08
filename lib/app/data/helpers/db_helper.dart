@@ -37,6 +37,14 @@ class DbHelper {
     ''');
 
     await db.execute('''
+      CREATE TABLE payment_methods (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        reference TEXT
+      )
+    ''');
+
+    await db.execute('''
       CREATE TABLE products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -58,17 +66,21 @@ class DbHelper {
       CREATE TABLE transactions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NULL,
+        order_type TEXT,
         sub_total REAL,
         discount REAL,
         tax REAL,
         grand_total REAL,
+        status TEXT,
+        payment_id INTEGER,
         created_at TEXT NULL,
-        updated_at TEXT NULL
+        updated_at TEXT NULL,
+        FOREIGN KEY (payment_id) REFERENCES payment_methods(id)
       )
     ''');
 
     await db.execute('''
-      CREATE TABLE transaction_detail (
+      CREATE TABLE transaction_details (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         transaction_id INTEGER,
         product_id INTEGER,
@@ -77,7 +89,6 @@ class DbHelper {
         discount REAL,
         tax REAL,
         total REAL,
-        created_at TEXT NULL,
         FOREIGN KEY (transaction_id) REFERENCES transactions(id),
         FOREIGN KEY (product_id) REFERENCES products(id)
       )

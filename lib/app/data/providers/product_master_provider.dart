@@ -25,7 +25,6 @@ class ProductMasterProvider extends GetConnect {
       LEFT JOIN categories ON products.category_id = categories.id
       LEFT JOIN units ON products.unit_id = units.id
     ''');
-    print(data.length);
 
     if (data.isEmpty) return [];
     return data

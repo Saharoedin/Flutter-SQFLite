@@ -1,10 +1,15 @@
 import 'package:flutter_sqflite/app/data/models/category_model.dart';
 import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/data/models/transaction_detail_model.dart';
 import 'package:flutter_sqflite/app/data/providers/category_provider.dart';
 import 'package:flutter_sqflite/app/data/providers/product_master_provider.dart';
 import 'package:get/get.dart';
 
 class CashierController extends GetxController {
+  var listDetailTransaction = List<TransactionDetail>.empty().obs;
+  var listDetailTransactionTemp = List<TransactionDetail>.empty().obs;
+  var transactionDetail = TransactionDetail().obs;
+
   var listProductMaster = List<ProductMaster>.empty().obs;
   var listProductMasterTemp = List<ProductMaster>.empty().obs;
   var productMaster = ProductMaster().obs;

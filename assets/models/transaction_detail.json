@@ -2,5 +2,9 @@
   "id": 1,
   "transaction_id": 1,
   "product_id": 1,
-  "qty": 1
+  "qty": 1,
+  "price": 0.1,
+  "discount": 0.1,
+  "tax": 0.1,
+  "total": 0.1
 }
