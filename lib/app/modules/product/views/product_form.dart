@@ -222,6 +222,35 @@ class ProductForm extends StatelessWidget {
                               SizedBox(
                                 height: 16,
                               ),
+                              GestureDetector(
+                                onTap: () => controller.isCustomizable.toggle(),
+                                child: Row(
+                                  children: [
+                                    Obx(
+                                      () => controller.isCustomizable.value ==
+                                              false
+                                          ? Icon(CupertinoIcons.square)
+                                          : Icon(
+                                              CupertinoIcons
+                                                  .checkmark_square_fill,
+                                              color: Colors.blue,
+                                            ),
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      'Customizable',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
                               Text(
                                 'Upload Image',
                                 style: TextStyle(
@@ -286,7 +315,10 @@ class ProductForm extends StatelessWidget {
                                     ),
                                   )
                                 ],
-                              )
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
                             ],
                           ),
                         ),
@@ -320,7 +352,11 @@ class ProductForm extends StatelessWidget {
                                           '${controller.txtDiscount.text}'),
                                       categoryId: controller.categoryId.value,
                                       unitId: controller.unitId.value,
-                                      isCustomizable: 1,
+                                      isCustomizable:
+                                          controller.isCustomizable.value ==
+                                                  true
+                                              ? 1
+                                              : 0,
                                       imagePath: controller.imagePath.value,
                                       createdAt:
                                           DateTime.now().toIso8601String(),
@@ -341,7 +377,11 @@ class ProductForm extends StatelessWidget {
                                           '${controller.txtDiscount.text}'),
                                       categoryId: controller.categoryId.value,
                                       unitId: controller.unitId.value,
-                                      isCustomizable: 1,
+                                      isCustomizable:
+                                          controller.isCustomizable.value ==
+                                                  true
+                                              ? 1
+                                              : 0,
                                       imagePath: controller.imagePath.value,
                                       updatedAt:
                                           DateTime.now().toIso8601String(),

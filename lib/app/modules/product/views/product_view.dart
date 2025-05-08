@@ -32,6 +32,7 @@ class ProductView extends GetView<ProductController> {
             padding: EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
+                controller.fetchProductMaster();
                 ProductSearch().showFormBottomSheet(context);
               },
               child: Icon(
@@ -194,12 +195,6 @@ class ProductView extends GetView<ProductController> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(
-              color: Colors.grey.shade200,
-            ),
-          ),
           Expanded(
             child: Obx(
               () {
@@ -234,7 +229,9 @@ class ProductView extends GetView<ProductController> {
                             isScrollControlled: true,
                             backgroundColor: Colors.white,
                             context: context,
-                            builder: (context) => ProductDetail(),
+                            builder: (context) => ProductDetail(
+                              product: product,
+                            ),
                           );
                         },
                       ),

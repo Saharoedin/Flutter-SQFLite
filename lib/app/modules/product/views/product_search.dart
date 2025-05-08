@@ -36,7 +36,10 @@ class ProductSearch extends StatelessWidget {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: () => Get.back(),
+                      onTap: () {
+                        controller.fetchProductMaster();
+                        Get.back();
+                      },
                       child: Icon(
                         CupertinoIcons.arrow_left,
                         color: Colors.white,
@@ -48,7 +51,13 @@ class ProductSearch extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         onChanged: (value) {
-                          //
+                          controller.listProductMasterTemp.value =
+                              controller.listProductMaster
+                                  .where(
+                                    (dt) => dt.name!
+                                        .isCaseInsensitiveContainsAny(value),
+                                  )
+                                  .toList();
                         },
                         decoration: InputDecoration(
                           hintText: 'Type some text here  ...',
@@ -80,34 +89,38 @@ class ProductSearch extends StatelessWidget {
               Expanded(
                 child: Container(
                   color: Colors.white,
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      ProductMaster product =
-                          controller.listProductMasterTemp[index];
-                      return GestureDetector(
-                        onTap: () {
-                          controller.isNew.value = false;
-                          controller.productMaster.value = product;
-                          controller.autoFill();
-                          ProductForm().showFormBottomSheet(context);
-                        },
-                        child: ProductItem(
-                          product: product,
-                          onEdit: () {
-                            print('on add');
+                  child: Obx(
+                    () => ListView.builder(
+                      itemCount: controller.listProductMasterTemp.length,
+                      itemBuilder: (context, index) {
+                        ProductMaster product =
+                            controller.listProductMasterTemp[index];
+                        return GestureDetector(
+                          onTap: () {
+                            controller.isNew.value = false;
+                            controller.productMaster.value = product;
+                            controller.autoFill();
+                            ProductForm().showFormBottomSheet(context);
                           },
-                          onDetail: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              backgroundColor: Colors.white,
-                              context: context,
-                              builder: (context) => ProductDetail(),
-                            );
-                          },
-                        ),
-                      );
-                    },
+                          child: ProductItem(
+                            product: product,
+                            onEdit: () {
+                              print('on add');
+                            },
+                            onDetail: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.white,
+                                context: context,
+                                builder: (context) => ProductDetail(
+                                  product: product,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

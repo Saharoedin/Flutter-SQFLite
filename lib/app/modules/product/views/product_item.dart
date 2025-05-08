@@ -22,6 +22,7 @@ class ProductItem extends StatelessWidget {
     return GestureDetector(
       onTap: onDetail,
       child: Card(
+        elevation: 0,
         margin: EdgeInsets.all(0),
         shape: Border(
           bottom: BorderSide(
@@ -154,9 +155,11 @@ class ProductItem extends StatelessWidget {
                       ),
                       Positioned(
                         bottom: 0,
-                        left: 12,
+                        left: 4,
                         child: Center(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Icon(
                                 CupertinoIcons.pencil_outline,
@@ -166,7 +169,9 @@ class ProductItem extends StatelessWidget {
                                 width: 4,
                               ),
                               Text(
-                                'Customizable',
+                                product.isCustomizable == 1
+                                    ? 'Customizable'
+                                    : 'Uncustomizable',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,

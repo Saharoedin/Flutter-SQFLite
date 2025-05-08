@@ -36,6 +36,8 @@ class ProductController extends GetxController {
   var isNew = true.obs;
   var imagePath = ''.obs;
 
+  var isCustomizable = false.obs;
+
   final ImagePicker picker = ImagePicker();
 
   void clearForm() {

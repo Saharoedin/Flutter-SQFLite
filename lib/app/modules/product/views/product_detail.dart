@@ -1,14 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite/app/data/models/product_master_model.dart';
+import 'package:flutter_sqflite/app/modules/product/controllers/product_controller.dart';
 import 'package:flutter_sqflite/app/modules/product/views/product_form.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetail extends StatelessWidget {
-  const ProductDetail({super.key});
+  final ProductMaster product;
+  const ProductDetail({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(ProductController());
     return ListView(
       padding: EdgeInsets.all(16),
       shrinkWrap: true,
@@ -33,13 +42,15 @@ class ProductDetail extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
-              image: AssetImage('assets/images/product2.jpg'),
+              image: product.imagePath == ''
+                  ? AssetImage('assets/images/product2.jpg')
+                  : FileImage(File('${product.imagePath}')),
               fit: BoxFit.cover,
             ),
           ),
         ),
         Text(
-          'Paket Geprek Mozarella (Gratis Teh Obeng / Es Kosong)',
+          '${product.name}',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -49,7 +60,7 @@ class ProductDetail extends StatelessWidget {
           height: 12,
         ),
         Text(
-          'Nasi (Bisa Ganti Nasi Daun Jeruk) + Ayam Geprek Mozarella + 3 Pilihan Sambal + Lalapan + Minuman',
+          '${product.description}',
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey.shade800,
@@ -63,7 +74,7 @@ class ProductDetail extends StatelessWidget {
             locale: 'id',
             symbol: 'IDR ',
             decimalDigits: 0,
-          ).format(35000)}',
+          ).format(product.price)}',
           style: TextStyle(
             fontSize: 14,
             color: Colors.black,
@@ -79,6 +90,9 @@ class ProductDetail extends StatelessWidget {
           width: Get.width,
           child: ElevatedButton(
             onPressed: () {
+              controller.isNew.value = false;
+              controller.productMaster.value = product;
+              controller.autoFill();
               ProductForm().showFormBottomSheet(context);
             },
             style: ButtonStyle(
